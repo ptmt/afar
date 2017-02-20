@@ -20,7 +20,7 @@ export default class Notification extends React.PureComponent {
   show() {
     Animated
       .spring(this.state.scale, {
-        toValue: 2,
+        toValue: 1,
         duration: 500,
         useNativeDriver: true
       })
@@ -29,8 +29,8 @@ export default class Notification extends React.PureComponent {
   render() {
     const { scale } = this.state;
     const opacity = scale.interpolate({
-      inputRange: [0, 1, 2],
-      outputRange: [0, 1, 0.5]
+      inputRange: [0, 1],
+      outputRange: [0, 0.5]
     });
     return (
       <Animated.View
@@ -40,7 +40,7 @@ export default class Notification extends React.PureComponent {
           { opacity, transform: [{ scaleX: scale }, { scaleY: scale }] }
         ]}
       >
-        <Text style={{ fontSize: 80 }}>{this.props.text}</Text>
+        <Text style={{ fontSize: 60 }}>{this.props.text}</Text>
       </Animated.View>
     );
   }
@@ -49,7 +49,7 @@ export default class Notification extends React.PureComponent {
 const styles = StyleSheet.create({
   container: {
     justifyContent: "center",
-    top: -50,
+    top: -200,
     position: "absolute",
     // : 1,
     alignItems: "center",

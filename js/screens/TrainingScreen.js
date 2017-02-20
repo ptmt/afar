@@ -6,20 +6,26 @@ import {
   StyleSheet,
   Text,
   View,
-  PanResponder
+  PanResponder,
+  Dimensions,
+  TouchableOpacity,
+  Button
 } from "react-native";
 import Orientation from "react-native-orientation";
 import moment from "moment";
 
 import { startTraining, stopTraining } from "../data/log";
 import Notification from "../components/Notification";
-import FocusPoint from '../components/FocusPoint'
+import FocusPoint from "../components/FocusPoint";
+
+const window = Dimensions.get("window");
+const WIDTH = window.width > window.height ? window.width : window.height;
 
 function formatTime(duration) {
   const m = duration.minutes();
   const s = duration.seconds();
   const format = d => String(d).length === 1 ? `0${d}` : d;
-  return `${format(m)}:${format(s)}`
+  return `${format(m)}:${format(s)}`;
 }
 
 export default class TrainingScreen extends Component {
@@ -36,15 +42,15 @@ export default class TrainingScreen extends Component {
       duration: moment.duration(0)
     };
     this.panResponder = PanResponder.create({
-      onStartShouldSetPanResponder: (evt, gestureState) => true,
-      onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
-      onMoveShouldSetPanResponder: (evt, gestureState) => true,
-      onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
+      onStartShouldSetPanResponder: (evt, gestureState) => gestureState.numberActiveTouches === 2,
+      onStartShouldSetPanResponderCapture: (evt, gestureState) => false,
+      onMoveShouldSetPanResponder: (evt, gestureState) => gestureState.numberActiveTouches === 2,
+      onMoveShouldSetPanResponderCapture: (evt, gestureState) => false,
       onPanResponderGrant: (evt, gestureState) => {
-        if (gestureState.numberActiveTouches === 2) {
-          this.stopMoving();
-          setTimeout(() => this.props.navigation.goBack(), 100);
-        }
+        // if (gestureState.numberActiveTouches === 2) {
+        //   this.stopMoving();
+        //   setTimeout(() => this.props.navigation.goBack(), 100);
+        // }
       },
       onPanResponderMove: (evt, gestureState) => {
         if (this.state.distance >= 1) {
@@ -63,7 +69,7 @@ export default class TrainingScreen extends Component {
         this.toggleMoving(dx, dy);
       },
       onShouldBlockNativeResponder: (evt, gestureState) => {
-        return true;
+        return false;
       }
     });
   }
@@ -76,7 +82,7 @@ export default class TrainingScreen extends Component {
   panResponder: any;
   componentDidMount() {
     Orientation.lockToLandscapeLeft();
-    AppState.addEventListener("change", this.handleAppStateChange);
+    AppState.addEventListener("change", this.handleAppStateChange.bind(this));
   }
   componentWillUnmount() {
     AppState.removeEventListener("change", this.handleAppStateChange);
@@ -133,6 +139,11 @@ export default class TrainingScreen extends Component {
     stopTraining({ endDistance: this.state.distance, endedAt: new Date() });
     this.setState({ pause: true });
   }
+  goBack() {
+    const { goBack } = this.props.navigation;
+    this.stopMoving();
+    setTimeout(() => goBack(), 100);
+  }
   render() {
     const { settings } = this.props.screenProps;
 
@@ -142,20 +153,28 @@ export default class TrainingScreen extends Component {
 
     return (
       <View
-        style={[styles.container, borderStyles]}
+        style={[StyleSheet.absoluteFill, styles.container, borderStyles]}
         {...this.panResponder.panHandlers}
       >
+        <Notification text={this.state.pause ? "Paused" : ""} />
         <View style={styles.points}>
           <FocusPoint content={settings.focusPoint} />
           <View style={{ width: this.state.distance }} />
           <FocusPoint content={settings.focusPoint} />
         </View>
         <Text style={styles.stats}>
-          Time:{" "}
-          {formatTime(this.state.duration)}, Distance:{" "}
-          {Math.round(this.state.distance)}
+          {formatTime(this.state.duration)}
         </Text>
-        <Notification text={this.state.pause ? "Pause" : "Start"} />
+        {this.state.pause &&
+          <View style={styles.header}>
+            <TouchableOpacity onPress={() => this.goBack()} hitSlop={{top: 10, bottom: 40, left: 10, right: 40}}>
+              <Text style={styles.stats}>Back</Text>
+            </TouchableOpacity>
+            {/* <Text style={styles.stats}>Distance: {Math.round(this.state.distance)}</Text> */}
+            <TouchableOpacity onPress={() => this.goBack()} hitSlop={{top: 10, bottom: 10, left: 10, right: 20}}>
+              <Text style={styles.stats}>Instructions</Text>
+            </TouchableOpacity>
+          </View>}
       </View>
     );
   }
@@ -163,14 +182,14 @@ export default class TrainingScreen extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#F5FCFF",
-    borderWidth: 5
+    borderWidth: 10
   },
   redBorder: {
-    borderColor: "salmon"
+    borderColor: "#F5FCFF"
   },
   greenBorder: {
     borderColor: "#99ffcc"
@@ -182,7 +201,19 @@ const styles = StyleSheet.create({
     flexDirection: "row"
   },
   stats: {
-    fontWeight: "300",
-    color: "#555"
+    // fontWeight: "300",
+    fontSize: 18,
+    color: "#777"
+  },
+  header: {
+    flexDirection: "row",
+    paddingLeft: 10,
+    paddingRight: 20,
+    justifyContent: "space-between",
+    position: "absolute",
+    alignItems: "center",
+    // flex: 1,
+    width: WIDTH,
+    top: 0
   }
 });

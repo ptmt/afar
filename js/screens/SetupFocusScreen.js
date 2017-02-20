@@ -27,7 +27,7 @@ export default class SetupFocus extends React.Component {
   render() {
     const featured = ["▵", "◯", "◎", "◐", "▢", "▦", "▩", "▱", "A", "◷", "◧"];
 
-    const { settings, saveSettings } = this.props.screenProps;
+    const { settings, updateSettings } = this.props.screenProps;
     return (
       <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.preview}>
@@ -38,7 +38,7 @@ export default class SetupFocus extends React.Component {
             autoCorrect={false}
             autoFocus={true}
             onChangeText={text =>
-              text && saveSettings({ ...settings, focusPoint: text })}
+              text && updateSettings({ focusPoint: text })}
             defaultValue={settings.focusPoint}
             maxLength={1}
             style={styles.textInput}
@@ -50,7 +50,7 @@ export default class SetupFocus extends React.Component {
             <TouchableOpacity
               key={f}
               style={styles.button}
-              onPress={() => saveSettings({ ...settings, focusPoint: f })}
+              onPress={() => updateSettings({ focusPoint: f })}
             >
               <Text style={styles.buttonText}>{f}</Text>
             </TouchableOpacity>
@@ -71,12 +71,11 @@ const styles = StyleSheet.create({
     height: 30,
     fontSize: 20,
     textAlign: "center",
-    backgroundColor: "white"
+    backgroundColor: "#fff"
   },
   container: {
     flex: 1,
     alignItems: "center"
-    // justifyContent: 'center'
   },
   subheader: {
     marginTop: 30,
