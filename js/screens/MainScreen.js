@@ -90,7 +90,8 @@ const styles = StyleSheet.create({
   chart: {
     // backgroundColor: 'white',
     height: 300,
-    marginVertical: 10
+    marginTop: 5,
+    marginBottom: 30,
   },
   header: {
     marginHorizontal: 10,

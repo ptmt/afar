@@ -100,49 +100,44 @@ export default class MainScreen extends React.Component {
     const distanceShape = prepareDistanceProgressLine(xScale, y1Scale);
     const durationShape = prepareDurationProgressLine(xScale, y2Scale);
     return (
-      <View style={{ backgroundColor: "white" }}>
-        <Svg width={WIDTH} height={HEIGHT}>
-          <Path
-            key={1}
-            x={margin.left}
-            y={margin.top}
-            fill="none"
-            stroke={"skyblue"}
-            strokeLinecap="round"
-            strokeWidth={3}
-            d={distanceShape(grouped)}
-          />
-          <Path
-            key={2}
-            x={margin.left}
-            y={margin.top}
-            fill="none"
-            stroke={"salmon"}
-            strokeLinecap="round"
-            strokeWidth={3}
-            d={durationShape(grouped)}
-          />
-          <XAxis
-            xScale={xScale}
-            margin={margin}
-          />
-          <YAxis
-            label={'px'}
-            yScale={y1Scale}
-            color={"skyblue"}
-            margin={margin}
-            offset={WIDTH - 40}
-          />
-          <YAxis
-            label={'minutes'}
-            labelFunc={(t) => Math.round(t / 60)}
-            yScale={y2Scale}
-            color={"salmon"}
-            margin={margin}
-            offset={15}
-          />
-        </Svg>
-      </View>
+      <Svg width={WIDTH} height={HEIGHT}>
+        <Path
+          key={1}
+          x={margin.left}
+          y={margin.top}
+          fill="none"
+          stroke={"skyblue"}
+          strokeLinecap="round"
+          strokeWidth={3}
+          d={distanceShape(grouped)}
+        />
+        <Path
+          key={2}
+          x={margin.left}
+          y={margin.top}
+          fill="none"
+          stroke={"salmon"}
+          strokeLinecap="round"
+          strokeWidth={3}
+          d={durationShape(grouped)}
+        />
+        <XAxis xScale={xScale} margin={margin} />
+        <YAxis
+          label={"px"}
+          yScale={y1Scale}
+          color={"skyblue"}
+          margin={margin}
+          offset={WIDTH - 40}
+        />
+        <YAxis
+          label={"minutes"}
+          labelFunc={t => Math.round(t / 60)}
+          yScale={y2Scale}
+          color={"salmon"}
+          margin={margin}
+          offset={15}
+        />
+      </Svg>
     );
   }
 }
