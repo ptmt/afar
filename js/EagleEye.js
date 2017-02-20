@@ -1,9 +1,7 @@
-/**
- * @flow
- */
+/* @flow */
 
 import React, { Component } from "react";
-import { AppRegistry } from "react-native";
+import { AppRegistry, PushNotificationIOS } from "react-native";
 import Orientation from "react-native-orientation";
 import { StackNavigator } from "react-navigation";
 
@@ -16,6 +14,8 @@ import { getAllTimeLog } from "./data/log";
 import type { TrainingSessionData } from "./data/log";
 import { loadSettings, saveSettings, DEFAULT_SETTINGS } from "./data/settings";
 import type { Settings } from "./data/settings";
+
+Orientation.lockToPortrait();
 
 const EagleEyeNavigator = StackNavigator(
   {
@@ -60,6 +60,7 @@ class EagleEyeApp extends React.Component {
 
   componentWillMount() {
     this.updateGlobalState();
+    this.scheduleNotification();
   }
 
   async updateGlobalState() {
@@ -68,16 +69,26 @@ class EagleEyeApp extends React.Component {
     this.setState({ trainings, settings });
   }
 
-  async saveSettings(settings: Settings) {
-    console.log('settings', settings)
-    await saveSettings(settings)
-    await this.updateGlobalState()
+  async updateSettings(settings: Settings) {
+    await saveSettings({ ...this.state.settings, ...settings });
+    await this.updateGlobalState();
+  }
+
+  async scheduleNotification() {
+    if (this.settings.reminder) {
+      await PushNotificationIOS.cancelAllLocalNotifications();
+      PushNotificationIOS.scheduleLocalNotification({
+        fireDate: moment().add(3, "hours"),
+        alertBody: "Don't forget to relax and make an exercise for your eyes"
+      });
+    }
   }
 
   render() {
     const screenProps = {
       ...this.state,
-      saveSettings: s => this.saveSettings(s)
+      updateSettings: s => this.updateSettings(s),
+      scheduleNotification: () => this.scheduleNotification()
     };
     return (
       <EagleEyeNavigator

@@ -7,8 +7,11 @@ import {
   ActivityIndicator,
   Switch,
   View,
-  TextInput
+  TextInput,
+  PushNotificationIOS
 } from "react-native";
+
+import moment from 'moment'
 
 import {
   Cell,
@@ -23,32 +26,19 @@ export default class SettingsScreen extends React.Component {
   static navigationOptions = {
     title: "Settings"
   };
-  renderFocusPoint() {
-    const { focusPoint } = this.props.screenProps.settings;
-    return (
-      <View style={{ flex: 1 }}>
-        <View style={styles.preview}>
-          <FocusPoint content={focusPoint} />
-        </View>
-        <TextInput
-          autoCorrect={false}
-          autoFocus={true}
-          defaultValue={focusPoint}
-          maxLength={1}
-          style={styles.textInput}
-        />
-        <Text>Recent uses</Text>
-        <Text>Featured</Text>
-      </View>
-    );
+  async setupNotifications() {
+    const { reminder } = this.props.screenProps.settings;
+    this.props.screenProps.updateSettings({ reminder: !reminder })
+    if (!reminder) {
+      const res = await PushNotificationIOS.requestPermissions();
+      if (res) {
+        this.props.screenProps.scheduleNotification()
+      }
+    }
   }
   render() {
     const { navigate, state } = this.props.navigation;
     const { settings } = this.props.screenProps;
-
-    if (state.params && state.params.setting === "FocusPoint") {
-      return this.renderFocusPoint();
-    }
 
     return (
       <View style={styles.stage}>
@@ -63,7 +53,7 @@ export default class SettingsScreen extends React.Component {
             />
             <CustomCell>
               <Text style={{ flex: 1, fontSize: 16 }}>Enable reminders</Text>
-              <Switch />
+              <Switch onChange={() => this.setupNotifications() } value={settings.reminder} />
             </CustomCell>
             <Cell
               cellStyle="RightDetail"
