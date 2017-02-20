@@ -18,7 +18,9 @@ import {
   TableView
 } from "react-native-tableview-simple";
 
-import ProgressChart from '../components/ProgressChart'
+import ProgressChart from "../components/ProgressChart";
+
+const Bold = props => <Text style={{ fontWeight: 'bold'}} {...props} />
 
 export default class MainScreen extends React.Component {
   static navigationOptions = {
@@ -47,12 +49,24 @@ export default class MainScreen extends React.Component {
     return (
       <View style={styles.container}>
         <ScrollView contentContainerStyle={styles.scroll}>
-          <Text style={styles.header}>Statistics</Text>
+          {/* <Text style={styles.header}>Statistics</Text> */}
           <View style={styles.chart}>
             <ProgressChart data={this.props.screenProps.trainings} />
           </View>
-          <Text style={styles.text}>Today you've spent: {this.spentToday()} sec out of 15 minutes</Text>
-          <Text style={styles.text}>All time: {moment.duration(this.allTimeSpent(), 'seconds').humanize()}</Text>
+          <Text style={styles.text}>
+            Today you've trained so far:{" "}
+              <Bold>
+                {moment.duration(this.spentToday(), 'seconds').minutes()}:
+                {moment.duration(this.spentToday(), 'seconds').seconds()}
+              </Bold>
+          </Text>
+          <Text style={styles.text}>
+            Daily goal: <Bold>15 minutes</Bold>
+          </Text>
+          <Text style={styles.text}>
+            Total:{" "}
+            <Bold>{moment.duration(this.allTimeSpent(), "seconds").humanize()}</Bold>
+          </Text>
         </ScrollView>
         <View style={styles.button}>
           <Button
@@ -68,7 +82,7 @@ export default class MainScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     // backgroundColor: "#EFEFF4",
-    flex: 1,
+    flex: 1
   },
   scroll: {
     padding: 10
@@ -76,19 +90,20 @@ const styles = StyleSheet.create({
   chart: {
     // backgroundColor: 'white',
     height: 300,
-    marginVertical: 10,
+    marginVertical: 10
   },
   header: {
     marginHorizontal: 10,
-    fontSize: 20,
+    fontSize: 20
   },
   text: {
     marginHorizontal: 10,
-    lineHeight: 20,
-    color: '#555',
+    lineHeight: 30,
+    color: "#555",
+    fontSize: 16,
   },
   button: {
     padding: 20,
-    backgroundColor: 'white'
+    backgroundColor: "white"
   }
 });

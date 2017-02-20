@@ -38,15 +38,16 @@ EagleEyeNavigator.prototype.componentDidUpdate = function(
   const currScreen = screenName(this.state.nav);
   const prevScreen = screenName(prevState.nav);
   if (!!currScreen && currScreen != prevScreen && currScreen !== "Training") {
+    prevProps.onUpdate();
     Orientation.lockToPortrait();
   }
 };
 
 class EagleEyeApp extends React.Component {
   state: {
-    trainings: Array<TrainingSessionData>;
-    settings: Settings;
-  }
+    trainings: Array<TrainingSessionData>,
+    settings: Settings
+  };
   constructor() {
     super();
     this.state = {
@@ -55,7 +56,11 @@ class EagleEyeApp extends React.Component {
     };
   }
 
-  async componentWillMount() {
+  componentWillMount() {
+    this.updateGlobalState();
+  }
+
+  async updateGlobalState() {
     const trainings = await getAllTimeLog();
     const settings = await loadSettings();
     this.setState({ trainings, settings });
@@ -64,9 +69,14 @@ class EagleEyeApp extends React.Component {
   render() {
     const screenProps = {
       ...this.state,
-      saveSettings,
-    }
-    return <EagleEyeNavigator screenProps={screenProps} />;
+      saveSettings
+    };
+    return (
+      <EagleEyeNavigator
+        screenProps={screenProps}
+        onUpdate={() => this.updateGlobalState()}
+      />
+    );
   }
 }
 
