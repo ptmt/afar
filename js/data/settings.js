@@ -2,14 +2,16 @@
 import { AsyncStorage } from "react-native";
 
 const SETTINGS_KEY = "settings";
-
+export const DEFAULT_SETTINGS = {
+  focusPoint: '▣',
+}
 export type Settings = {
   dayGoalInMinutes?: number;
 };
 
 export async function loadSettings() {
   const json = await AsyncStorage.getItem(SETTINGS_KEY);
-  const settings = json ? JSON.parse(json) : {};
+  const settings = json ? JSON.parse(json) : DEFAULT_SETTINGS;
   return settings;
 }
 

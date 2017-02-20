@@ -13,8 +13,7 @@ import moment from "moment";
 
 import { startTraining, stopTraining } from "../data/log";
 import Notification from "../components/Notification";
-
-const FocusPoint = ({ distance }) => <View style={styles.circle} />;
+import FocusPoint from '../components/FocusPoint'
 
 function formatTime(duration) {
   const m = duration.minutes();
@@ -135,6 +134,8 @@ export default class TrainingScreen extends Component {
     this.setState({ pause: true });
   }
   render() {
+    const { settings } = this.props.screenProps;
+
     const borderStyles = this.state.pause
       ? styles.redBorder
       : styles.greenBorder;
@@ -144,17 +145,17 @@ export default class TrainingScreen extends Component {
         style={[styles.container, borderStyles]}
         {...this.panResponder.panHandlers}
       >
-        <Notification text={this.state.pause ? "Pause" : "Play"} />
         <View style={styles.points}>
-          <FocusPoint />
+          <FocusPoint content={settings.focusPoint} />
           <View style={{ width: this.state.distance }} />
-          <FocusPoint />
+          <FocusPoint content={settings.focusPoint} />
         </View>
         <Text style={styles.stats}>
           Time:{" "}
           {formatTime(this.state.duration)}, Distance:{" "}
           {Math.round(this.state.distance)}
         </Text>
+        <Notification text={this.state.pause ? "Pause" : "Start"} />
       </View>
     );
   }
@@ -179,12 +180,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row"
-  },
-  circle: {
-    backgroundColor: "rgba(0, 0, 0, 0.8)",
-    height: 70,
-    width: 70,
-    borderRadius: 35
   },
   stats: {
     fontWeight: "300",

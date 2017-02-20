@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
   Switch,
   View,
+  TextInput
 } from "react-native";
 
 import {
@@ -16,22 +17,48 @@ import {
   TableView
 } from "react-native-tableview-simple";
 
-export default class MainScreen extends React.Component {
+import FocusPoint from "../components/FocusPoint";
+
+export default class SettingsScreen extends React.Component {
   static navigationOptions = {
     title: "Settings"
   };
+  renderFocusPoint() {
+    const { focusPoint } = this.props.screenProps.settings;
+    return (
+      <View style={{ flex: 1 }}>
+        <View style={styles.preview}>
+          <FocusPoint content={focusPoint} />
+        </View>
+        <TextInput
+          autoCorrect={false}
+          autoFocus={true}
+          defaultValue={focusPoint}
+          maxLength={1}
+          style={styles.textInput}
+        />
+        <Text>Recent uses</Text>
+        <Text>Featured</Text>
+      </View>
+    );
+  }
   render() {
-    const { navigate } = this.props.navigation;
+    const { navigate, state } = this.props.navigation;
+    const { settings } = this.props.screenProps;
+
+    if (state.params && state.params.setting === "FocusPoint") {
+      return this.renderFocusPoint();
+    }
 
     return (
       <View style={styles.stage}>
         <TableView>
-          <Section header="SETTINGS">
+          <Section header=" ">
             <Cell
               cellStyle="RightDetail"
               accessory="DisclosureIndicator"
               detail="15 minutes"
-              title="Total time per day"
+              title="Daily goal"
               onPress={() => navigate("Settings", {})}
             />
             <CustomCell>
@@ -41,11 +68,25 @@ export default class MainScreen extends React.Component {
             <Cell
               cellStyle="RightDetail"
               accessory="DisclosureIndicator"
-              title="Focus Points"
-              detail="A"
+              title="Focus Point"
+              detail={settings.focusPoint}
+              onPress={() => navigate("SetupFocus")}
             />
           </Section>
-
+          <Section header=" ">
+            <Cell
+              cellStyle="RightDetail"
+              accessory="DisclosureIndicator"
+              title="Help"
+              onPress={() => navigate("Settings", {})}
+            />
+            <Cell
+              cellStyle="RightDetail"
+              accessory="DisclosureIndicator"
+              title="About"
+              onPress={() => navigate("Settings", {})}
+            />
+          </Section>
         </TableView>
       </View>
     );
@@ -54,8 +95,9 @@ export default class MainScreen extends React.Component {
 
 const styles = StyleSheet.create({
   stage: {
-    backgroundColor: "#ddd",
-    paddingTop: 1,
+    // backgroundColor: "#ddd",
+    flex: 1,
+    paddingTop: 1
     // paddingBottom: 20
-  }
+  },
 });

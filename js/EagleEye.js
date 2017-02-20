@@ -10,17 +10,19 @@ import { StackNavigator } from "react-navigation";
 import TrainingScreen from "./screens/TrainingScreen";
 import MainScreen from "./screens/MainScreen";
 import SettingsScreen from "./screens/SettingsScreen";
+import SetupFocusScreen from "./screens/SetupFocusScreen";
 
 import { getAllTimeLog } from "./data/log";
 import type { TrainingSessionData } from "./data/log";
-import { loadSettings, saveSettings } from "./data/settings";
+import { loadSettings, saveSettings, DEFAULT_SETTINGS } from "./data/settings";
 import type { Settings } from "./data/settings";
 
 const EagleEyeNavigator = StackNavigator(
   {
     Main: { screen: MainScreen },
     Training: { screen: TrainingScreen },
-    Settings: { screen: SettingsScreen }
+    Settings: { screen: SettingsScreen },
+    SetupFocus: { screen: SetupFocusScreen }
   },
   {
     headerMode: "screen"
@@ -52,7 +54,7 @@ class EagleEyeApp extends React.Component {
     super();
     this.state = {
       trainings: [],
-      settings: {}
+      settings: DEFAULT_SETTINGS
     };
   }
 
@@ -66,10 +68,16 @@ class EagleEyeApp extends React.Component {
     this.setState({ trainings, settings });
   }
 
+  async saveSettings(settings: Settings) {
+    console.log('settings', settings)
+    await saveSettings(settings)
+    await this.updateGlobalState()
+  }
+
   render() {
     const screenProps = {
       ...this.state,
-      saveSettings
+      saveSettings: s => this.saveSettings(s)
     };
     return (
       <EagleEyeNavigator

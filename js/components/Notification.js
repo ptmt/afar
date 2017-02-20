@@ -40,7 +40,7 @@ export default class Notification extends React.PureComponent {
           { opacity, transform: [{ scaleX: scale }, { scaleY: scale }] }
         ]}
       >
-        <Text style={{ fontSize: 20 }}>{this.props.text}</Text>
+        <Text style={{ fontSize: 80 }}>{this.props.text}</Text>
       </Animated.View>
     );
   }
@@ -49,6 +49,7 @@ export default class Notification extends React.PureComponent {
 const styles = StyleSheet.create({
   container: {
     justifyContent: "center",
+    top: -50,
     position: "absolute",
     // : 1,
     alignItems: "center",
