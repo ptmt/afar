@@ -11,7 +11,7 @@ import {
   PushNotificationIOS
 } from "react-native";
 
-import moment from 'moment'
+import moment from "moment";
 
 import {
   Cell,
@@ -28,11 +28,11 @@ export default class SettingsScreen extends React.Component {
   };
   async setupNotifications() {
     const { reminder } = this.props.screenProps.settings;
-    this.props.screenProps.updateSettings({ reminder: !reminder })
+    this.props.screenProps.updateSettings({ reminder: !reminder });
     if (!reminder) {
       const res = await PushNotificationIOS.requestPermissions();
       if (res) {
-        this.props.screenProps.scheduleNotification()
+        this.props.screenProps.scheduleNotification();
       }
     }
   }
@@ -51,10 +51,17 @@ export default class SettingsScreen extends React.Component {
               title="Daily goal"
               onPress={() => navigate("Settings", {})}
             />
-            <CustomCell>
-              <Text style={{ flex: 1, fontSize: 16 }}>Enable reminders</Text>
-              <Switch onChange={() => this.setupNotifications() } value={settings.reminder} />
-            </CustomCell>
+            <Cell
+              title="Enable reminders"
+              cellAccessoryView={
+                <Switch
+                  onChange={() => this.setupNotifications()}
+                  value={settings.reminder}
+                />
+              }
+              contentContainerStyle={{ paddingVertical: 4 }} // Adjust height
+            />
+
             <Cell
               cellStyle="RightDetail"
               accessory="DisclosureIndicator"
@@ -89,5 +96,5 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 1
     // paddingBottom: 20
-  },
+  }
 });

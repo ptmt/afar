@@ -20,25 +20,38 @@ import {
 
 import ProgressChart from "../components/ProgressChart";
 
-const Bold = props => <Text style={{ fontWeight: 'bold'}} {...props} />
+const Bold = props => <Text style={{ fontWeight: "bold" }} {...props} />;
 
 export default class MainScreen extends React.Component {
-  static navigationOptions = {
-    title: "Eagle Eye",
-    header: ({ navigate }) => ({
-      right: <Button title={"Settings"} onPress={() => navigate("Settings")} />
-    })
-  };
+  static navigationOptions = ({ navigation }) => ({
+    title: "Afar",
+    headerRight: (
+      <Button
+        title={"Settings"}
+        onPress={() => navigation.navigate("Settings")}
+      />
+    )
+  });
   allTimeSpent() {
     const minutesToday = this.props.screenProps.trainings
-      .filter(t => moment(t.startedAt).calendar().indexOf("Today") > -1)
+      .filter(
+        t =>
+          moment(t.startedAt)
+            .calendar()
+            .indexOf("Today") > -1
+      )
       .map(t => moment(t.endedAt).diff(moment(t.startedAt), "seconds"));
 
     return minutesToday.reduce((a, m) => a + parseInt(m, 10), 0);
   }
   spentToday() {
     const spentToday = this.props.screenProps.trainings
-      .filter(t => moment(t.startedAt).calendar().indexOf("Today") > -1)
+      .filter(
+        t =>
+          moment(t.startedAt)
+            .calendar()
+            .indexOf("Today") > -1
+      )
       .map(t => moment(t.endedAt).diff(moment(t.startedAt), "seconds"));
 
     return spentToday.reduce((a, m) => a + parseInt(m, 10), 0);
@@ -51,21 +64,23 @@ export default class MainScreen extends React.Component {
         <ScrollView contentContainerStyle={styles.scroll}>
           {/* <Text style={styles.header}>Statistics</Text> */}
           <View style={styles.chart}>
-            <ProgressChart data={this.props.screenProps.trainings} />
+            {/* <ProgressChart data={this.props.screenProps.trainings} /> */}
           </View>
           <Text style={styles.text}>
-            Today you've trained so far:{" "}
-              <Bold>
-                {moment.duration(this.spentToday(), 'seconds').minutes()}:
-                {moment.duration(this.spentToday(), 'seconds').seconds()}
-              </Bold>
+            Trained today:{" "}
+            <Bold>
+              {moment.duration(this.spentToday(), "seconds").minutes()}:
+              {moment.duration(this.spentToday(), "seconds").seconds()}
+            </Bold>
           </Text>
           <Text style={styles.text}>
             Daily goal: <Bold>15 minutes</Bold>
           </Text>
           <Text style={styles.text}>
             Total:{" "}
-            <Bold>{moment.duration(this.allTimeSpent(), "seconds").humanize()}</Bold>
+            <Bold>
+              {moment.duration(this.allTimeSpent(), "seconds").humanize()}
+            </Bold>
           </Text>
         </ScrollView>
         <View style={styles.button}>
@@ -91,7 +106,7 @@ const styles = StyleSheet.create({
     // backgroundColor: 'white',
     height: 300,
     marginTop: 5,
-    marginBottom: 30,
+    marginBottom: 30
   },
   header: {
     marginHorizontal: 10,
@@ -101,7 +116,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     lineHeight: 30,
     color: "#555",
-    fontSize: 16,
+    fontSize: 16
   },
   button: {
     padding: 20,

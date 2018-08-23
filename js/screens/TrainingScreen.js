@@ -24,15 +24,13 @@ const WIDTH = window.width > window.height ? window.width : window.height;
 function formatTime(duration) {
   const m = duration.minutes();
   const s = duration.seconds();
-  const format = d => String(d).length === 1 ? `0${d}` : d;
+  const format = d => (String(d).length === 1 ? `0${d}` : d);
   return `${format(m)}:${format(s)}`;
 }
 
 export default class TrainingScreen extends Component {
   static navigationOptions = {
-    header: {
-      visible: false
-    }
+    header: null
   };
   constructor() {
     super();
@@ -42,9 +40,11 @@ export default class TrainingScreen extends Component {
       duration: moment.duration(0)
     };
     this.panResponder = PanResponder.create({
-      onStartShouldSetPanResponder: (evt, gestureState) => gestureState.numberActiveTouches === 2,
+      onStartShouldSetPanResponder: (evt, gestureState) =>
+        gestureState.numberActiveTouches === 2,
       onStartShouldSetPanResponderCapture: (evt, gestureState) => false,
-      onMoveShouldSetPanResponder: (evt, gestureState) => gestureState.numberActiveTouches === 2,
+      onMoveShouldSetPanResponder: (evt, gestureState) =>
+        gestureState.numberActiveTouches === 2,
       onMoveShouldSetPanResponderCapture: (evt, gestureState) => false,
       onPanResponderGrant: (evt, gestureState) => {
         // if (gestureState.numberActiveTouches === 2) {
@@ -105,9 +105,8 @@ export default class TrainingScreen extends Component {
     }
     setTimeout(
       () =>
-        this.setState(
-          { distance: this.state.distance + 0.5 },
-          () => this.moveCircle()
+        this.setState({ distance: this.state.distance + 0.5 }, () =>
+          this.moveCircle()
         ),
       1500
     );
@@ -128,9 +127,10 @@ export default class TrainingScreen extends Component {
     });
     this.setState({ pause: false }, () => this.moveCircle());
     this.interval = setInterval(
-      () => this.setState({
-        duration: this.state.duration.add(moment.duration(1, "s"))
-      }),
+      () =>
+        this.setState({
+          duration: this.state.duration.add(moment.duration(1, "s"))
+        }),
       1000
     );
   }
@@ -162,19 +162,24 @@ export default class TrainingScreen extends Component {
           <View style={{ width: this.state.distance }} />
           <FocusPoint content={settings.focusPoint} />
         </View>
-        <Text style={styles.stats}>
-          {formatTime(this.state.duration)}
-        </Text>
-        {this.state.pause &&
+        <Text style={styles.stats}>{formatTime(this.state.duration)}</Text>
+        {this.state.pause && (
           <View style={styles.header}>
-            <TouchableOpacity onPress={() => this.goBack()} hitSlop={{top: 10, bottom: 40, left: 10, right: 40}}>
+            <TouchableOpacity
+              onPress={() => this.goBack()}
+              hitSlop={{ top: 10, bottom: 40, left: 10, right: 40 }}
+            >
               <Text style={styles.stats}>Back</Text>
             </TouchableOpacity>
             {/* <Text style={styles.stats}>Distance: {Math.round(this.state.distance)}</Text> */}
-            <TouchableOpacity onPress={() => this.goBack()} hitSlop={{top: 10, bottom: 10, left: 10, right: 20}}>
+            <TouchableOpacity
+              onPress={() => this.goBack()}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 20 }}
+            >
               <Text style={styles.stats}>Instructions</Text>
             </TouchableOpacity>
-          </View>}
+          </View>
+        )}
       </View>
     );
   }
