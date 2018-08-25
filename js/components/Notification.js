@@ -6,25 +6,34 @@ export default class Notification extends React.PureComponent {
   constructor() {
     super();
     this.state = {
-      scale: new Animated.Value(0)
+      scale: new Animated.Value(1)
     };
   }
   componentDidMount() {
     this.show();
   }
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.text !== this.props.text) {
-      this.show();
+  componentDidUpdate(prevProps) {
+    if (prevProps.text !== this.props.text) {
+      if (this.props.text === "") {
+        this.hide();
+      } else {
+        this.show();
+      }
     }
   }
   show() {
-    Animated
-      .spring(this.state.scale, {
-        toValue: 1,
-        duration: 500,
-        useNativeDriver: true
-      })
-      .start(() => this.state.scale.setValue(0));
+    Animated.timing(this.state.scale, {
+      toValue: 1,
+      duration: 400,
+      useNativeDriver: true
+    }).start();
+  }
+  hide() {
+    // Animated.timing(this.state.scale, {
+    //   toValue: 0,
+    //   duration: 300,
+    //   useNativeDriver: true
+    // }).start();
   }
   render() {
     const { scale } = this.state;
@@ -40,7 +49,10 @@ export default class Notification extends React.PureComponent {
           { opacity, transform: [{ scaleX: scale }, { scaleY: scale }] }
         ]}
       >
-        <Text style={{ fontSize: 60 }}>{this.props.text}</Text>
+        <Text style={styles.h1}>{this.props.text}</Text>
+        <Text style={styles.subtitle}>
+          {this.props.text ? "Two-finger tap to continue" : ""}
+        </Text>
       </Animated.View>
     );
   }
@@ -48,12 +60,22 @@ export default class Notification extends React.PureComponent {
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: "center",
-    top: -200,
+    //top: "5%",
     position: "absolute",
-    // : 1,
+    flex: 1,
+    justifyContent: "space-between",
+    marginTop: 20,
+    marginVertical: 80,
     alignItems: "center",
-    // top: 50,
     backgroundColor: "transparent"
+  },
+  h1: {
+    fontSize: 60,
+    color: "#777",
+    fontWeight: "bold"
+  },
+  subtitle: {
+    fontSize: 20,
+    color: "#777"
   }
 });

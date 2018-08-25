@@ -186,16 +186,17 @@ export default class TrainingScreen extends Component {
   }
 }
 
+const backgroundColor = "#FFFDD6";
 const styles = StyleSheet.create({
   container: {
     // flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#F5FCFF",
+    backgroundColor,
     borderWidth: 10
   },
   redBorder: {
-    borderColor: "#F5FCFF"
+    borderColor: "#FFEF79"
   },
   greenBorder: {
     borderColor: "#99ffcc"
@@ -213,7 +214,7 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: "row",
-    paddingLeft: 10,
+    paddingLeft: 20,
     paddingRight: 20,
     justifyContent: "space-between",
     position: "absolute",

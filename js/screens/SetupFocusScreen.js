@@ -37,8 +37,7 @@ export default class SetupFocus extends React.Component {
           <TextInput
             autoCorrect={false}
             autoFocus={true}
-            onChangeText={text =>
-              text && updateSettings({ focusPoint: text })}
+            onChangeText={text => text && updateSettings({ focusPoint: text })}
             defaultValue={settings.focusPoint}
             maxLength={1}
             style={styles.textInput}
@@ -78,8 +77,10 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   subheader: {
-    marginTop: 30,
-    fontSize: 16
+    marginTop: 50,
+    marginBottom: 30,
+    fontSize: 19,
+    fontWeight: "bold"
   },
   section: {
     flexDirection: "row",
