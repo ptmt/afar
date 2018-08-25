@@ -1,0 +1,1 @@
+const tintColor = "#FDD836";

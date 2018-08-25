@@ -1,6 +1,6 @@
 /* @float */
 import React from "react";
-import { View, Dimensions } from "react-native";
+import { View, Text as RNText, Dimensions } from "react-native";
 
 import moment from "moment";
 
@@ -10,36 +10,33 @@ import { Svg, Path, G, Text, Line } from "react-native-svg";
 
 import XAxis from "./XAxis";
 import YAxis from "./YAxis";
-// import YAsis from './YAsis'
 
-const WIDTH = Dimensions.get("window").width;
+const WIDTH = Dimensions.get("window").width - 20;
 const HEIGHT = 300;
 
 const margin = {
   top: 10,
   bottom: 10,
   left: 20,
-  right: 5
+  right: 20
 };
 
 function groupByDay(data) {
   const duration = d => moment(d.endedAt).diff(moment(d.startedAt), "seconds");
   return Object.values(
-    data.reduce(
-      (byDay, t) => {
-        const key = moment(t.startedAt).format("YYYY_MMM_dd");
-        if (!byDay[key]) {
-          byDay[key] = { duration: 0 };
-        }
-        byDay[key].duration += duration(t);
-        byDay[key].lastTraining = t.startedAt;
-        byDay[key].endDistance = t.endDistance > byDay[key].endDistance
+    data.reduce((byDay, t) => {
+      const key = moment(t.startedAt).format("YYYY_MMM_dd");
+      if (!byDay[key]) {
+        byDay[key] = { duration: 0 };
+      }
+      byDay[key].duration += duration(t);
+      byDay[key].lastTraining = t.startedAt;
+      byDay[key].endDistance =
+        t.endDistance > byDay[key].endDistance
           ? byDay[key].endDistance
           : t.endDistance;
-        return byDay;
-      },
-      {}
-    )
+      return byDay;
+    }, {})
   );
 }
 
@@ -51,7 +48,12 @@ function findMin(data) {
 function getScaleX(data) {
   const minTime = findMin(data);
   return scaleTime()
-    .domain([moment(minTime).toDate(), moment().add(1, "day").toDate()])
+    .domain([
+      moment(minTime).toDate(),
+      moment()
+        .add(1, "day")
+        .toDate()
+    ])
     .range([0, WIDTH - margin.left - margin.right]);
 }
 
@@ -90,7 +92,17 @@ export default class MainScreen extends React.Component {
     const { data } = this.props;
 
     if (!data || data.length === 0) {
-      return null;
+      return (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center"
+          }}
+        >
+          <RNText style={{ fontSize: 13 }}>No data</RNText>
+        </View>
+      );
     }
     const grouped = groupByDay(data);
 
@@ -99,9 +111,11 @@ export default class MainScreen extends React.Component {
     const y2Scale = getScaleY2(grouped);
     const distanceShape = prepareDistanceProgressLine(xScale, y1Scale);
     const durationShape = prepareDurationProgressLine(xScale, y2Scale);
+
+    console.log(grouped, distanceShape[grouped]);
     return (
       <Svg width={WIDTH} height={HEIGHT}>
-        <Path
+        {/* <Path
           key={1}
           x={margin.left}
           y={margin.top}
@@ -120,7 +134,7 @@ export default class MainScreen extends React.Component {
           strokeLinecap="round"
           strokeWidth={3}
           d={durationShape(grouped)}
-        />
+        /> */}
         <XAxis xScale={xScale} margin={margin} />
         <YAxis
           label={"px"}

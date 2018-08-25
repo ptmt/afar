@@ -4,7 +4,7 @@ import React, { Component } from "react";
 import { AppRegistry, PushNotificationIOS } from "react-native";
 import Orientation from "react-native-orientation";
 
-import { getAllTimeLog } from "./data/log";
+import { getAllTimeLogFlat } from "./data/log";
 import type { TrainingSessionData } from "./data/log";
 import { loadSettings, saveSettings, DEFAULT_SETTINGS } from "./data/settings";
 import type { Settings } from "./data/settings";
@@ -35,7 +35,7 @@ class AfarApp extends React.Component {
   }
 
   async updateGlobalState() {
-    const trainings = await getAllTimeLog();
+    const trainings = await getAllTimeLogFlat();
     const settings = await loadSettings();
     this.setState({ trainings, settings });
   }

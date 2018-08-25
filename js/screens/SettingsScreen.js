@@ -41,51 +41,49 @@ export default class SettingsScreen extends React.Component {
     const { settings } = this.props.screenProps;
 
     return (
-      <View style={styles.stage}>
-        <TableView>
-          <Section header=" ">
-            <Cell
-              cellStyle="RightDetail"
-              accessory="DisclosureIndicator"
-              detail="15 minutes"
-              title="Daily goal"
-              onPress={() => navigate("Settings", {})}
-            />
-            <Cell
-              title="Enable reminders"
-              cellAccessoryView={
-                <Switch
-                  onChange={() => this.setupNotifications()}
-                  value={settings.reminder}
-                />
-              }
-              contentContainerStyle={{ paddingVertical: 4 }} // Adjust height
-            />
+      <TableView style={{ flex: 1 }}>
+        <Section header=" ">
+          <Cell
+            cellStyle="RightDetail"
+            accessory="DisclosureIndicator"
+            detail="15 minutes"
+            title="Daily goal"
+            onPress={() => navigate("Settings", {})}
+          />
+          <Cell
+            title="Enable reminders"
+            cellAccessoryView={
+              <Switch
+                onChange={() => this.setupNotifications()}
+                value={settings.reminder}
+              />
+            }
+            contentContainerStyle={{ paddingVertical: 4 }} // Adjust height
+          />
 
-            <Cell
-              cellStyle="RightDetail"
-              accessory="DisclosureIndicator"
-              title="Focus Point"
-              detail={settings.focusPoint}
-              onPress={() => navigate("SetupFocus")}
-            />
-          </Section>
-          <Section header=" ">
-            <Cell
-              cellStyle="RightDetail"
-              accessory="DisclosureIndicator"
-              title="Help"
-              onPress={() => navigate("Settings", {})}
-            />
-            <Cell
-              cellStyle="RightDetail"
-              accessory="DisclosureIndicator"
-              title="About"
-              onPress={() => navigate("Settings", {})}
-            />
-          </Section>
-        </TableView>
-      </View>
+          <Cell
+            cellStyle="RightDetail"
+            accessory="DisclosureIndicator"
+            title="Focus Point"
+            detail={settings.focusPoint}
+            onPress={() => navigate("SetupFocus")}
+          />
+        </Section>
+        <Section header=" ">
+          <Cell
+            cellStyle="RightDetail"
+            accessory="DisclosureIndicator"
+            title="Help"
+            onPress={() => navigate("Settings", {})}
+          />
+          <Cell
+            cellStyle="RightDetail"
+            accessory="DisclosureIndicator"
+            title="About"
+            onPress={() => navigate("Settings", {})}
+          />
+        </Section>
+      </TableView>
     );
   }
 }

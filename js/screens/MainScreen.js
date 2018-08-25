@@ -27,7 +27,7 @@ const Bold = props => <Text style={{ fontWeight: "bold" }} {...props} />;
 
 export default class MainScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
-    title: "Afar",
+    title: "👁 Afar",
     headerRight: (
       <Button
         title={"Settings"}
@@ -37,7 +37,7 @@ export default class MainScreen extends React.Component {
   });
   allTimeSpent() {
     const secondsAll = this.props.screenProps.trainings
-      .map(t => moment(t.endedAt).diff(moment(t.startedAt), "seconds"))
+      .map(t => moment.duration(t.duration).seconds())
       .reduce((a, m) => a + parseInt(m, 10), 0);
 
     return secondsAll > 0
@@ -52,7 +52,7 @@ export default class MainScreen extends React.Component {
             .calendar()
             .indexOf("Today") > -1
       )
-      .map(t => moment(t.endedAt).diff(moment(t.startedAt), "seconds"))
+      .map(t => moment.duration(t.duration).seconds())
       .reduce((a, m) => a + parseInt(m, 10), 0);
 
     return Math.max(0, spentToday);
@@ -71,19 +71,20 @@ export default class MainScreen extends React.Component {
     return (
       <View style={styles.container}>
         <ScrollView contentContainerStyle={styles.scroll}>
-          {/* <Text style={styles.header}>Statistics</Text> */}
           <View style={styles.chart}>
             <ProgressChart data={this.props.screenProps.trainings} />
           </View>
-          <Text style={styles.text}>
-            Trained today: <Bold>{this.spendTodayFormatted()}</Bold>
-          </Text>
-          <Text style={styles.text}>
-            Daily goal: <Bold>15 minutes</Bold>
-          </Text>
-          <Text style={styles.text}>
-            Total: <Bold>{this.allTimeSpent()}</Bold>
-          </Text>
+          <View style={styles.stats}>
+            <Text style={styles.text}>
+              Trained today: <Bold>{this.spendTodayFormatted()}</Bold>
+            </Text>
+            <Text style={styles.text}>
+              Daily goal: <Bold>15 minutes</Bold>
+            </Text>
+            <Text style={styles.text}>
+              Total: <Bold>{this.allTimeSpent()}</Bold>
+            </Text>
+          </View>
         </ScrollView>
         <SafeAreaView style={styles.button}>
           <Button
@@ -102,13 +103,18 @@ const styles = StyleSheet.create({
     flex: 1
   },
   scroll: {
-    padding: 10
+    padding: 20
   },
   chart: {
-    // backgroundColor: 'white',
+    backgroundColor: "white",
     height: 300,
     marginTop: 5,
-    marginBottom: 30
+    marginBottom: 30,
+    borderRadius: 10,
+    shadowRadius: 10,
+    shadowOffset: { x: 3, y: 3 },
+    shadowColor: "black",
+    shadowOpacity: 0.1
   },
   header: {
     marginHorizontal: 10,
@@ -123,5 +129,8 @@ const styles = StyleSheet.create({
   button: {
     padding: 20,
     backgroundColor: "white"
+  },
+  stats: {
+    alignItems: "flex-start"
   }
 });

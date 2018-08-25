@@ -1,34 +1,35 @@
 /* @flow */
 import { AsyncStorage } from "react-native";
 
-const TRAINING_KEY = "trainings";
+const TRAINING_KEY = "log";
 
 export type TrainingSessionData = {
   startDistance?: number,
   endDistance?: number,
+  focusPoint: String,
   startedAt?: Date,
-  endedAt?: Date
+  duration: String,
+  id: Number
 };
 
-export async function startTraining(sessionData: TrainingSessionData) {
-  const trainingsJSON = await AsyncStorage.getItem(TRAINING_KEY);
-  const trainings = trainingsJSON ? JSON.parse(trainingsJSON) : [];
-  trainings.push(sessionData);
-  await AsyncStorage.setItem(TRAINING_KEY, JSON.stringify(trainings));
-}
-
-export async function stopTraining(sessionData: TrainingSessionData) {
-  const trainingsJSON = await AsyncStorage.getItem(TRAINING_KEY);
-  const trainings = trainingsJSON ? JSON.parse(trainingsJSON) : [{}];
-  trainings[trainings.length - 1] = {
-    ...trainings[trainings.length - 1],
-    ...sessionData
+export async function reportProgress(sessionData: TrainingSessionData) {
+  const trainings = await getAllTimeLog();
+  const updatedTrainings = {
+    ...trainings,
+    [sessionData.id]: sessionData
   };
-  await AsyncStorage.setItem(TRAINING_KEY, JSON.stringify(trainings));
+  console.log(sessionData);
+  await AsyncStorage.setItem(TRAINING_KEY, JSON.stringify(updatedTrainings));
 }
 
-export async function getAllTimeLog() {
-  const trainingsJSON = await AsyncStorage.getItem(TRAINING_KEY);
-  const trainings = trainingsJSON ? JSON.parse(trainingsJSON) : [];
+export async function getAllTimeLog(): Map<String, TrainingSessionData> {
+  const savedData = await AsyncStorage.getItem(TRAINING_KEY);
+  const trainings = savedData ? JSON.parse(savedData) : {};
   return trainings;
+}
+
+export async function getAllTimeLogFlat(): Array<TrainingSessionData> {
+  const trainings = await getAllTimeLog();
+  console.log(trainings);
+  return Object.values(trainings);
 }

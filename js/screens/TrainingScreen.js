@@ -13,9 +13,11 @@ import {
   Button
 } from "react-native";
 import Orientation from "react-native-orientation";
+import LinearGradient from "react-native-linear-gradient";
+
 import moment from "moment";
 
-import { startTraining, stopTraining } from "../data/log";
+import { getAllTimeLog, reportProgress } from "../data/log";
 import Notification from "../components/Notification";
 import FocusPoint from "../components/FocusPoint";
 
@@ -121,23 +123,27 @@ export default class TrainingScreen extends Component {
       }
     }
   }
-  startMoving() {
-    startTraining({
-      startDistance: this.state.distance,
-      startedAt: new Date()
-    });
+  async startMoving() {
+    const id = Object.keys(await getAllTimeLog()).length;
+    const startedAt = new Date();
+    const startDistance = this.state.distance;
     this.setState({ pause: false }, () => this.moveCircle());
-    this.interval = setInterval(
-      () =>
-        this.setState({
-          duration: this.state.duration.add(moment.duration(1, "s"))
-        }),
-      1000
-    );
+    this.interval = setInterval(() => {
+      const duration = this.state.duration.add(moment.duration(1, "s"));
+      this.setState({
+        duration
+      });
+      reportProgress({
+        id,
+        startedAt,
+        duration: duration.toJSON(),
+        startDistance,
+        endDistance: this.state.distance
+      });
+    }, 1000);
   }
   stopMoving() {
     clearInterval(this.interval);
-    stopTraining({ endDistance: this.state.distance, endedAt: new Date() });
     this.setState({ pause: true });
   }
   goBack() {
@@ -154,33 +160,42 @@ export default class TrainingScreen extends Component {
 
     return (
       <SafeAreaView
-        style={[StyleSheet.absoluteFill, styles.container, borderStyles]}
+        style={[StyleSheet.absoluteFill]}
         {...this.panResponder.panHandlers}
       >
-        <Notification text={this.state.pause ? "Paused" : ""} />
-        <View style={styles.points}>
-          <FocusPoint content={settings.focusPoint} />
-          <View style={{ width: this.state.distance }} />
-          <FocusPoint content={settings.focusPoint} />
-        </View>
-        <Text style={styles.stats}>{formatTime(this.state.duration)}</Text>
-        {this.state.pause && (
-          <View style={styles.header}>
-            <TouchableOpacity
-              onPress={() => this.goBack()}
-              hitSlop={{ top: 10, bottom: 40, left: 10, right: 40 }}
-            >
-              <Text style={styles.stats}>Back</Text>
-            </TouchableOpacity>
-            {/* <Text style={styles.stats}>Distance: {Math.round(this.state.distance)}</Text> */}
-            <TouchableOpacity
-              onPress={() => this.goBack()}
-              hitSlop={{ top: 10, bottom: 10, left: 10, right: 20 }}
-            >
-              <Text style={styles.stats}>Instructions</Text>
-            </TouchableOpacity>
+        <LinearGradient
+          colors={["#FEFFB7", "#FEFFE2"]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={[StyleSheet.absoluteFill, styles.container, borderStyles]}
+        >
+          <Notification text={this.state.pause ? "Paused" : ""} />
+          <View style={styles.points}>
+            <FocusPoint content={settings.focusPoint} />
+            <View style={{ width: this.state.distance }} />
+            <FocusPoint content={settings.focusPoint} />
           </View>
-        )}
+          <Text style={styles.stats}>{formatTime(this.state.duration)}</Text>
+          {this.state.pause && (
+            <View style={styles.header}>
+              <TouchableOpacity
+                onPress={() => this.goBack()}
+                hitSlop={{ top: 10, bottom: 40, left: 10, right: 40 }}
+              >
+                <Text style={styles.stats}>Back</Text>
+              </TouchableOpacity>
+              {/* <Text style={styles.stats}>
+                Distance: {Math.round(this.state.distance)}
+              </Text> */}
+              <TouchableOpacity
+                onPress={() => this.goBack()}
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 20 }}
+              >
+                <Text style={styles.stats}>Instructions</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </LinearGradient>
       </SafeAreaView>
     );
   }
@@ -210,7 +225,8 @@ const styles = StyleSheet.create({
   stats: {
     // fontWeight: "300",
     fontSize: 18,
-    color: "#777"
+    color: "#777",
+    marginBottom: 5
   },
   header: {
     flexDirection: "row",
