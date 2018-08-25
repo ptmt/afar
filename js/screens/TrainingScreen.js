@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Text,
   View,
+  SafeAreaView,
   PanResponder,
   Dimensions,
   TouchableOpacity,
@@ -152,7 +153,7 @@ export default class TrainingScreen extends Component {
       : styles.greenBorder;
 
     return (
-      <View
+      <SafeAreaView
         style={[StyleSheet.absoluteFill, styles.container, borderStyles]}
         {...this.panResponder.panHandlers}
       >
@@ -180,7 +181,7 @@ export default class TrainingScreen extends Component {
             </TouchableOpacity>
           </View>
         )}
-      </View>
+      </SafeAreaView>
     );
   }
 }

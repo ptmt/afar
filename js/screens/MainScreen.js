@@ -6,7 +6,8 @@ import {
   Text,
   ActivityIndicator,
   Switch,
-  View
+  View,
+  SafeAreaView
 } from "react-native";
 
 import moment from "moment";
@@ -17,6 +18,8 @@ import {
   Section,
   TableView
 } from "react-native-tableview-simple";
+
+import padStart from "pad-start";
 
 import ProgressChart from "../components/ProgressChart";
 
@@ -33,16 +36,13 @@ export default class MainScreen extends React.Component {
     )
   });
   allTimeSpent() {
-    const minutesToday = this.props.screenProps.trainings
-      .filter(
-        t =>
-          moment(t.startedAt)
-            .calendar()
-            .indexOf("Today") > -1
-      )
-      .map(t => moment(t.endedAt).diff(moment(t.startedAt), "seconds"));
+    const secondsAll = this.props.screenProps.trainings
+      .map(t => moment(t.endedAt).diff(moment(t.startedAt), "seconds"))
+      .reduce((a, m) => a + parseInt(m, 10), 0);
 
-    return minutesToday.reduce((a, m) => a + parseInt(m, 10), 0);
+    return secondsAll > 0
+      ? moment.duration(secondsAll, "seconds").humanize()
+      : "None";
   }
   spentToday() {
     const spentToday = this.props.screenProps.trainings
@@ -52,9 +52,18 @@ export default class MainScreen extends React.Component {
             .calendar()
             .indexOf("Today") > -1
       )
-      .map(t => moment(t.endedAt).diff(moment(t.startedAt), "seconds"));
+      .map(t => moment(t.endedAt).diff(moment(t.startedAt), "seconds"))
+      .reduce((a, m) => a + parseInt(m, 10), 0);
 
-    return spentToday.reduce((a, m) => a + parseInt(m, 10), 0);
+    return Math.max(0, spentToday);
+  }
+  spendTodayFormatted() {
+    const spendSecondsToday = moment.duration(this.spentToday(), "seconds");
+    return `${padStart(spendSecondsToday.minutes(), 2, "0")}:${padStart(
+      spendSecondsToday.seconds(),
+      2,
+      "0"
+    )}`;
   }
   render() {
     const { navigate } = this.props.navigation;
@@ -64,31 +73,24 @@ export default class MainScreen extends React.Component {
         <ScrollView contentContainerStyle={styles.scroll}>
           {/* <Text style={styles.header}>Statistics</Text> */}
           <View style={styles.chart}>
-            {/* <ProgressChart data={this.props.screenProps.trainings} /> */}
+            <ProgressChart data={this.props.screenProps.trainings} />
           </View>
           <Text style={styles.text}>
-            Trained today:{" "}
-            <Bold>
-              {moment.duration(this.spentToday(), "seconds").minutes()}:
-              {moment.duration(this.spentToday(), "seconds").seconds()}
-            </Bold>
+            Trained today: <Bold>{this.spendTodayFormatted()}</Bold>
           </Text>
           <Text style={styles.text}>
             Daily goal: <Bold>15 minutes</Bold>
           </Text>
           <Text style={styles.text}>
-            Total:{" "}
-            <Bold>
-              {moment.duration(this.allTimeSpent(), "seconds").humanize()}
-            </Bold>
+            Total: <Bold>{this.allTimeSpent()}</Bold>
           </Text>
         </ScrollView>
-        <View style={styles.button}>
+        <SafeAreaView style={styles.button}>
           <Button
             title="Start training"
             onPress={() => navigate("Training", { name: "Jane" })}
           />
-        </View>
+        </SafeAreaView>
       </View>
     );
   }
