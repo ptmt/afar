@@ -75,7 +75,7 @@ class AfarApp extends React.Component<{}, MainState> {
             currScreen !== "Training"
           ) {
             Orientation.lockToPortrait();
-            this.updateGlobalState();
+            setTimeout(() => this.updateGlobalState(), 1000);
           }
         }}
       />

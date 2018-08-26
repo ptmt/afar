@@ -6,11 +6,12 @@ type Props = {
   content: string,
   text?: boolean,
   pause?: boolean,
-  textAlign?: "left" | "right" | "center"
+  textAlign?: "left" | "right" | "center",
+  width: number
 };
-const StaticFocusPoint = ({ content, textAlign = "center" }: Props) => (
+const StaticFocusPoint = ({ content, width, textAlign = "center" }: Props) => (
   <Text
-    style={[styles.focusPoint, { textAlign }]}
+    style={[styles.focusPoint, { width: Math.max(width, 100), textAlign }]}
     adjustsFontSizeToFit={true}
     numberOfLines={1}
   >
@@ -71,10 +72,11 @@ class DynamicTextFocusPoint extends React.Component<Props, State> {
     if (this.state.tokens.length == 0) {
       return null;
     }
+
     return (
       <StaticFocusPoint
         content={this.state.tokens[this.state.i]}
-        textAlign={this.props.textAlign}
+        width={this.props.width}
       />
     );
   }
@@ -89,7 +91,6 @@ export default (props: Props) =>
 
 const styles = StyleSheet.create({
   focusPoint: {
-    fontSize: 80,
-    width: 200
+    fontSize: 80
   }
 });

@@ -35,7 +35,9 @@ type Props = {
   screenProps: {
     settings: {}
   },
-  navigation: {}
+  navigation: {
+    goBack: Function
+  }
 };
 type State = {
   distance: number,
@@ -47,6 +49,9 @@ export default class TrainingScreen extends Component<Props, State> {
   static navigationOptions = {
     header: null
   };
+
+  moving: boolean;
+
   constructor() {
     super();
     this.state = {
@@ -54,6 +59,7 @@ export default class TrainingScreen extends Component<Props, State> {
       pause: true,
       duration: moment.duration(0)
     };
+    this.moving = false;
     this.panResponder = PanResponder.create({
       onStartShouldSetPanResponder: (evt, gestureState) =>
         gestureState.numberActiveTouches === 2,
@@ -68,20 +74,35 @@ export default class TrainingScreen extends Component<Props, State> {
         // }
       },
       onPanResponderMove: (evt, gestureState) => {
-        if (this.state.distance >= 1) {
-          this.setState({
-            distance: this.state.distance - gestureState.vy * 20
-          });
-        } else {
-          this.setState({ distance: 1 });
+        if (Math.abs(gestureState.dy) > 0) {
+          this.moving = true;
+          if (this.state.distance >= 1) {
+            if (this.state.distance > 450) {
+              this.setState({ distance: 450 });
+            } else {
+              this.setState({
+                distance: this.state.distance - gestureState.dy / 2
+              });
+            }
+          } else {
+            this.setState({ distance: 1 });
+          }
         }
       },
       onPanResponderTerminationRequest: (evt, gestureState) => true,
       onPanResponderRelease: (evt, { dx, dy }) => {
-        this.toggleMoving(dx, dy);
+        if (!this.moving) {
+          this.toggleMoving(dx, dy);
+        } else {
+          this.moving = false;
+        }
       },
       onPanResponderTerminate: (evt, { dx, dy }) => {
-        this.toggleMoving(dx, dy);
+        if (!this.moving) {
+          this.toggleMoving(dx, dy);
+        } else {
+          this.moving = false;
+        }
       },
       onShouldBlockNativeResponder: (evt, gestureState) => {
         return false;
@@ -167,47 +188,45 @@ export default class TrainingScreen extends Component<Props, State> {
 
     return (
       <SafeAreaView
-        style={[StyleSheet.absoluteFill]}
+        style={[StyleSheet.absoluteFill, styles.container, borderStyles]}
         {...this.panResponder.panHandlers}
       >
-        <View style={[StyleSheet.absoluteFill, styles.container, borderStyles]}>
-          <Notification text={this.state.pause ? "Paused" : ""} />
-          <View style={styles.points}>
-            <FocusPoint
-              content={settings.textToRead || settings.focusPoint}
-              text={!!settings.textToRead}
-              pause={this.state.pause}
-              textAlign="right"
-            />
-            <View style={{ width: this.state.distance }} />
-            <FocusPoint
-              content={settings.textToRead || settings.focusPoint}
-              text={!!settings.textToRead}
-              pause={this.state.pause}
-              textAlign="left"
-            />
-          </View>
-          <Text style={styles.stats}>{formatTime(this.state.duration)}</Text>
-          {this.state.pause && (
-            <View style={styles.header}>
-              <TouchableOpacity
-                onPress={() => this.goBack()}
-                hitSlop={{ top: 10, bottom: 40, left: 10, right: 40 }}
-              >
-                <Text style={styles.stats}>Back</Text>
-              </TouchableOpacity>
-              {/* <Text style={styles.stats}>
+        <Notification text={this.state.pause ? "Paused" : ""} />
+        <View style={styles.points}>
+          <FocusPoint
+            content={settings.textToRead || settings.focusPoint}
+            text={!!settings.textToRead}
+            pause={this.state.pause}
+            width={this.state.distance / 2}
+          />
+          <View style={{ width: this.state.distance / 2 }} />
+          <FocusPoint
+            content={settings.textToRead || settings.focusPoint}
+            text={!!settings.textToRead}
+            pause={this.state.pause}
+            width={this.state.distance / 2}
+          />
+        </View>
+        <Text style={styles.stats}>{formatTime(this.state.duration)}</Text>
+        {this.state.pause && (
+          <View style={styles.header}>
+            <TouchableOpacity
+              onPress={() => this.goBack()}
+              hitSlop={{ top: 10, bottom: 40, left: 10, right: 40 }}
+            >
+              <Text style={styles.stats}>Back</Text>
+            </TouchableOpacity>
+            {/* <Text style={styles.stats}>
                 Distance: {Math.round(this.state.distance)}
               </Text> */}
-              <TouchableOpacity
-                onPress={() => this.goBack()}
-                hitSlop={{ top: 10, bottom: 10, left: 10, right: 20 }}
-              >
-                <Text style={styles.stats}>Instructions</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-        </View>
+            <TouchableOpacity
+              onPress={() => this.goBack()}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 20 }}
+            >
+              <Text style={styles.stats}>Instructions</Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </SafeAreaView>
     );
   }

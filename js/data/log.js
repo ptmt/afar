@@ -6,10 +6,10 @@ const TRAINING_KEY = "log";
 export type TrainingSessionData = {
   startDistance?: number,
   endDistance?: number,
-  focusPoint: String,
+  focusPoint?: string,
   startedAt?: Date,
-  duration: String,
-  id: Number
+  duration: string,
+  id: number
 };
 
 export async function reportProgress(sessionData: TrainingSessionData) {
@@ -18,18 +18,19 @@ export async function reportProgress(sessionData: TrainingSessionData) {
     ...trainings,
     [sessionData.id]: sessionData
   };
-  console.log(sessionData);
+
   await AsyncStorage.setItem(TRAINING_KEY, JSON.stringify(updatedTrainings));
 }
 
-export async function getAllTimeLog(): Map<String, TrainingSessionData> {
+export async function getAllTimeLog(): Promise<{
+  [string]: TrainingSessionData
+}> {
   const savedData = await AsyncStorage.getItem(TRAINING_KEY);
   const trainings = savedData ? JSON.parse(savedData) : {};
   return trainings;
 }
 
-export async function getAllTimeLogFlat(): Array<TrainingSessionData> {
+export async function getAllTimeLogFlat() {
   const trainings = await getAllTimeLog();
-  console.log(trainings);
   return Object.values(trainings);
 }

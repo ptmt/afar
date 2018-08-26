@@ -14,9 +14,9 @@ const Bold = props => (
 
 export default function StartButton({ onPress, title }) {
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity onPress={onPress} style={styles.container}>
       <LinearGradient
-        style={styles.container}
+        style={styles.gradient}
         colors={[themes.tintColor, lighten(0.1, themes.tintColor)]}
       >
         <Bold>{title}</Bold>
@@ -28,18 +28,19 @@ export default function StartButton({ onPress, title }) {
 const styles = StyleSheet.create({
   container: {
     shadowRadius: 10,
-    shadowOffset: { x: 3, y: 3 },
+    shadowOffset: { width: 3, height: 3 },
     shadowColor: "black",
-    shadowOpacity: 0.1,
-    padding: 14,
+    shadowOpacity: 0.2,
     margin: 20,
-    borderRadius: 10,
-    // flex: 1,
-    // // width: "100%",
     marginVertical: 10,
+    borderRadius: 10,
+    overflow: "hidden",
+    backgroundColor: themes.tintColor
+  },
+  gradient: {
+    padding: 14,
     justifyContent: "center",
     alignItems: "center"
-    // backgroundColor: themes.tintColor
   },
   label: {
     fontSize: 16

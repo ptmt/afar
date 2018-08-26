@@ -1,4 +1,4 @@
-/* @float */
+/* @flow */
 import React from "react";
 import { View, Dimensions } from "react-native";
 import moment from "moment";
@@ -15,7 +15,7 @@ function getTicks(scale) {
 
   const a = [moment(domain[0]).valueOf(), moment(domain[1]).valueOf()];
   const r = d3range(a[0], a[1], (a[1] - a[0]) / NUMBER_OF_TICKS);
-  console.log(a[0], a[1]);
+
   return r.map((d, i) => ({
     x: scale(d),
     label: moment(d).format("MMM D")

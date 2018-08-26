@@ -1,3 +1,4 @@
+/* @flow */
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
@@ -17,7 +18,7 @@ export default function Stat({ label, children }) {
 const styles = StyleSheet.create({
   container: {
     shadowRadius: 10,
-    shadowOffset: { x: 3, y: 3 },
+    shadowOffset: { width: 3, height: 3 },
     shadowColor: "black",
     shadowOpacity: 0.1,
     backgroundColor: "white",

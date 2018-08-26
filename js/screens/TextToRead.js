@@ -45,6 +45,10 @@ export default class TextToRead extends React.Component {
             style={styles.textInput}
           />
         </View>
+        <Button
+          title="Clear"
+          onPress={() => updateSettings({ textToRead: "" })}
+        />
       </ScrollView>
     );
   }

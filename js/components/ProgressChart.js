@@ -1,4 +1,4 @@
-/* @float */
+/* @flow */
 import React from "react";
 import { View, Text as RNText, Dimensions } from "react-native";
 
@@ -8,10 +8,13 @@ import * as d3Shape from "d3-shape";
 import { scaleTime, scaleLinear } from "d3-scale";
 import { Svg, Path, G, Text, Line } from "react-native-svg";
 
+import { type TrainingSessionData } from "../data/log";
 import XAxis from "./XAxis";
 import YAxis from "./YAxis";
 
-const WIDTH = Dimensions.get("window").width - 40;
+const window = Dimensions.get("window");
+const WIDTH =
+  (window.width < window.height ? window.width : window.height) - 40;
 const HEIGHT = 300;
 
 const margin = {
@@ -21,38 +24,50 @@ const margin = {
   right: 20
 };
 
-function groupByDay(data) {
-  const duration = d => moment.duration(d.duration).seconds();
-  return Object.values(
-    data.reduce((byDay, t) => {
-      const key = moment(t.startedAt).format("YYYY_MMM_DD");
-      if (!byDay[key]) {
-        byDay[key] = { duration: 0 };
-      }
-      byDay[key].duration += duration(t);
-      byDay[key].lastTraining = t.startedAt;
-      byDay[key].endDistance =
-        t.endDistance > byDay[key].endDistance
-          ? byDay[key].endDistance
-          : t.endDistance;
-      return byDay;
-    }, {})
-  );
+type IntermData = {
+  key: string,
+  lastTraining: Date,
+  trainings: number,
+  totalScore: number,
+  duration: number
+};
+
+function getValues<Obj: Object>(o: Obj): Array<$Values<Obj>> {
+  return Object.values(o);
 }
 
-function findMin(data) {
+function groupByDay(data: Array<TrainingSessionData>): Array<IntermData> {
+  const duration = d => moment.duration(d.duration).seconds();
+  const d: { [string]: IntermData } = data.reduce((byDay: IntermData, t) => {
+    const key = moment(t.startedAt).format("YYYY_MMM_DD");
+    if (!byDay[key]) {
+      byDay[key] = { key, duration: 0 };
+    }
+    byDay[key].duration += duration(t);
+    byDay[key].lastTraining = t.startedAt;
+    byDay[key].trainings = (byDay[key].trainings || 0) + 1;
+    byDay[key].totalScore = byDay[key].totalScore
+      ? byDay[key].totalScore + t.endDistance
+      : t.endDistance;
+    return byDay;
+  }, {});
+  return getValues(d);
+}
+
+function findLatest(data) {
   const times = data.map(d => moment(d.lastTraining).valueOf());
   return Math.min(...times);
 }
 
 function getScaleX(data) {
-  const minTime = findMin(data);
+  const latestTime = findLatest(data);
+
   return scaleTime()
     .domain([
-      moment(minTime)
+      moment(latestTime)
         .subtract(3, "day")
         .toDate(),
-      moment(minTime)
+      moment(latestTime)
         .add(2, "day")
         .toDate()
     ])
@@ -61,13 +76,13 @@ function getScaleX(data) {
 
 function getScaleY1(data) {
   return scaleLinear()
-    .domain([50, 500])
+    .domain([10, 500])
     .range([HEIGHT - margin.top - margin.bottom - 20, 0]);
 }
 
 function getScaleY2(data) {
   const durations = data.map(d => d.duration);
-  const maxDuration = Math.max(300, ...durations);
+  const maxDuration = Math.max(15 * 60, ...durations);
 
   return scaleLinear()
     .domain([0, maxDuration])
@@ -77,9 +92,10 @@ function getScaleY2(data) {
 function prepareDistanceProgressLine(x, y) {
   return d3Shape
     .line()
-    .defined(point => point && point.lastTraining && point.endDistance)
+    .defined(point => point && point.lastTraining && point.totalScore)
     .x(d => x(moment(d.lastTraining).toDate()))
-    .y(d => y(d.endDistance));
+    .y(d => y(d.totalScore / d.trainings))
+    .curve(d3Shape.curveBundle.beta(0.5));
 }
 
 function prepareDurationProgressLine(x, y) {
@@ -90,7 +106,10 @@ function prepareDurationProgressLine(x, y) {
     .y(d => y(d.duration));
 }
 
-export default class MainScreen extends React.Component {
+type Props = {
+  data: Array<TrainingSessionData>
+};
+export default class MainScreen extends React.Component<Props> {
   render() {
     const { data } = this.props;
 
@@ -114,30 +133,35 @@ export default class MainScreen extends React.Component {
     const y2Scale = getScaleY2(grouped);
     const distanceShape = prepareDistanceProgressLine(xScale, y1Scale);
     const durationShape = prepareDurationProgressLine(xScale, y2Scale);
+    const distance = distanceShape(grouped);
+    const duration = durationShape(grouped);
 
-    console.log(grouped, distanceShape(grouped));
     return (
       <Svg width={WIDTH} height={HEIGHT}>
-        <Path
-          key={1}
-          x={margin.left}
-          y={margin.top}
-          fill="none"
-          stroke={"skyblue"}
-          strokeLinecap="round"
-          strokeWidth={3}
-          d={distanceShape(grouped)}
-        />
-        <Path
-          key={2}
-          x={margin.left}
-          y={margin.top}
-          fill="none"
-          stroke={"salmon"}
-          strokeLinecap="round"
-          strokeWidth={3}
-          d={durationShape(grouped)}
-        />
+        {distance && (
+          <Path
+            key={1}
+            x={margin.left}
+            y={margin.top}
+            fill="none"
+            stroke={"skyblue"}
+            strokeLinecap="round"
+            strokeWidth={3}
+            d={distance}
+          />
+        )}
+        {duration && (
+          <Path
+            key={2}
+            x={margin.left}
+            y={margin.top}
+            fill="none"
+            stroke={"salmon"}
+            strokeLinecap="round"
+            strokeWidth={3}
+            d={duration}
+          />
+        )}
         <XAxis xScale={xScale} margin={margin} />
         <YAxis
           label={"px"}
