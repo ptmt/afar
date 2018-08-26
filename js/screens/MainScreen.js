@@ -22,8 +22,7 @@ import {
 import padStart from "pad-start";
 
 import ProgressChart from "../components/ProgressChart";
-
-const Bold = props => <Text style={{ fontWeight: "bold" }} {...props} />;
+import Stat from "../components/Stat";
 
 export default class MainScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
@@ -75,15 +74,9 @@ export default class MainScreen extends React.Component {
             <ProgressChart data={this.props.screenProps.trainings} />
           </View>
           <View style={styles.stats}>
-            <Text style={styles.text}>
-              Trained today: <Bold>{this.spendTodayFormatted()}</Bold>
-            </Text>
-            <Text style={styles.text}>
-              Daily goal: <Bold>15 minutes</Bold>
-            </Text>
-            <Text style={styles.text}>
-              Total: <Bold>{this.allTimeSpent()}</Bold>
-            </Text>
+            <Stat label="Trained today">{this.spendTodayFormatted()}</Stat>
+            <Stat label="Daily goal">15 minutes</Stat>
+            <Stat label="Total">{this.allTimeSpent()}</Stat>
           </View>
         </ScrollView>
         <SafeAreaView style={styles.button}>

@@ -11,21 +11,21 @@ import { Svg, Path, G, Text, Line } from "react-native-svg";
 import XAxis from "./XAxis";
 import YAxis from "./YAxis";
 
-const WIDTH = Dimensions.get("window").width - 20;
+const WIDTH = Dimensions.get("window").width - 40;
 const HEIGHT = 300;
 
 const margin = {
   top: 10,
-  bottom: 10,
-  left: 20,
+  bottom: 5,
+  left: 40,
   right: 20
 };
 
 function groupByDay(data) {
-  const duration = d => moment(d.endedAt).diff(moment(d.startedAt), "seconds");
+  const duration = d => moment.duration(d.duration).seconds();
   return Object.values(
     data.reduce((byDay, t) => {
-      const key = moment(t.startedAt).format("YYYY_MMM_dd");
+      const key = moment(t.startedAt).format("YYYY_MMM_DD");
       if (!byDay[key]) {
         byDay[key] = { duration: 0 };
       }
@@ -49,23 +49,26 @@ function getScaleX(data) {
   const minTime = findMin(data);
   return scaleTime()
     .domain([
-      moment(minTime).toDate(),
-      moment()
-        .add(1, "day")
+      moment(minTime)
+        .subtract(3, "day")
+        .toDate(),
+      moment(minTime)
+        .add(2, "day")
         .toDate()
     ])
-    .range([0, WIDTH - margin.left - margin.right]);
+    .range([0, WIDTH - margin.left]);
 }
 
 function getScaleY1(data) {
   return scaleLinear()
-    .domain([0, 500])
+    .domain([50, 500])
     .range([HEIGHT - margin.top - margin.bottom - 20, 0]);
 }
 
 function getScaleY2(data) {
   const durations = data.map(d => d.duration);
-  const maxDuration = Math.max(...durations);
+  const maxDuration = Math.max(300, ...durations);
+
   return scaleLinear()
     .domain([0, maxDuration])
     .range([HEIGHT - margin.top - margin.bottom - 20, 0]);
@@ -112,10 +115,10 @@ export default class MainScreen extends React.Component {
     const distanceShape = prepareDistanceProgressLine(xScale, y1Scale);
     const durationShape = prepareDurationProgressLine(xScale, y2Scale);
 
-    console.log(grouped, distanceShape[grouped]);
+    console.log(grouped, distanceShape(grouped));
     return (
       <Svg width={WIDTH} height={HEIGHT}>
-        {/* <Path
+        <Path
           key={1}
           x={margin.left}
           y={margin.top}
@@ -134,14 +137,14 @@ export default class MainScreen extends React.Component {
           strokeLinecap="round"
           strokeWidth={3}
           d={durationShape(grouped)}
-        /> */}
+        />
         <XAxis xScale={xScale} margin={margin} />
         <YAxis
           label={"px"}
           yScale={y1Scale}
           color={"skyblue"}
           margin={margin}
-          offset={WIDTH - 40}
+          offset={WIDTH - 20}
         />
         <YAxis
           label={"minutes"}

@@ -8,7 +8,8 @@ import {
   Switch,
   View,
   TouchableOpacity,
-  TextInput
+  TextInput,
+  KeyboardAvodingView
 } from "react-native";
 
 import {
@@ -25,15 +26,34 @@ export default class SetupFocus extends React.Component {
     title: "Setup Focus Point"
   };
   render() {
-    const featured = ["▵", "◯", "◎", "◐", "▢", "▦", "▩", "▱", "A", "◷", "◧"];
+    const featured = [
+      "▵",
+      "◯",
+      "◎",
+      "◐",
+      "▢",
+      "▦",
+      "▩",
+      "▱",
+      "A",
+      "◷",
+      "◧",
+      "❤️",
+      "🖼",
+      "🌎",
+      "👻"
+    ];
 
     const { settings, updateSettings } = this.props.screenProps;
     return (
-      <ScrollView contentContainerStyle={styles.container}>
+      <ScrollView
+        contentContainerStyle={styles.container}
+        keyboardDismissMode="interactive"
+      >
         <View style={styles.preview}>
           <FocusPoint content={settings.focusPoint} />
         </View>
-        <View style={{ marginBottom: 50 }}>
+        <View style={{ marginBottom: 20 }}>
           <TextInput
             autoCorrect={false}
             autoFocus={true}
@@ -63,6 +83,7 @@ export default class SetupFocus extends React.Component {
 const styles = StyleSheet.create({
   preview: {
     margin: 30,
+    height: 100,
     alignItems: "center"
   },
   textInput: {
@@ -77,7 +98,7 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   subheader: {
-    marginTop: 50,
+    marginTop: 20,
     marginBottom: 30,
     fontSize: 19,
     fontWeight: "bold"
@@ -86,10 +107,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     paddingHorizontal: 20,
     flex: 1,
-    flexWrap: "wrap"
+    flexWrap: "wrap",
+    alignItems: "center",
+    justifyContent: "center"
   },
   button: {
-    margin: 10,
+    margin: 5,
     width: 50,
     height: 50,
     justifyContent: "center",
