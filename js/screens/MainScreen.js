@@ -23,10 +23,11 @@ import padStart from "pad-start";
 
 import ProgressChart from "../components/ProgressChart";
 import Stat from "../components/Stat";
+import StartButton from "../components/StartButton";
 
 export default class MainScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
-    title: "👁 Afar",
+    title: "Afar",
     headerRight: (
       <Button
         title={"Settings"}
@@ -79,9 +80,9 @@ export default class MainScreen extends React.Component {
             <Stat label="Total">{this.allTimeSpent()}</Stat>
           </View>
         </ScrollView>
-        <SafeAreaView style={styles.button}>
-          <Button
-            title="Start training"
+        <SafeAreaView>
+          <StartButton
+            title="Start"
             onPress={() => navigate("Training", { name: "Jane" })}
           />
         </SafeAreaView>
@@ -96,13 +97,13 @@ const styles = StyleSheet.create({
     flex: 1
   },
   scroll: {
-    padding: 20
+    paddingHorizontal: 20
   },
   chart: {
     backgroundColor: "white",
     height: 300,
-    marginTop: 5,
-    marginBottom: 30,
+    marginTop: 10,
+    marginBottom: 10,
     borderRadius: 10,
     shadowRadius: 10,
     shadowOffset: { x: 3, y: 3 },
@@ -119,10 +120,7 @@ const styles = StyleSheet.create({
     color: "#555",
     fontSize: 16
   },
-  button: {
-    padding: 20,
-    backgroundColor: "white"
-  },
+
   stats: {
     alignItems: "flex-start"
   }

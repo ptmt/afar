@@ -21,29 +21,11 @@ import {
 
 import FocusPoint from "../components/FocusPoint";
 
-export default class SetupFocus extends React.Component {
+export default class TextToRead extends React.Component {
   static navigationOptions = {
-    title: "Setup Focus Point"
+    title: "Text to Read"
   };
   render() {
-    const featured = [
-      "▵",
-      "◯",
-      "◎",
-      "◐",
-      "▢",
-      "▦",
-      "▩",
-      "▱",
-      "A",
-      "◷",
-      "◧",
-      "❤️",
-      "🖼",
-      "🌎",
-      "👻"
-    ];
-
     const { settings, updateSettings } = this.props.screenProps;
     return (
       <ScrollView
@@ -51,29 +33,17 @@ export default class SetupFocus extends React.Component {
         keyboardDismissMode="on-drag"
       >
         <View style={styles.preview}>
-          <FocusPoint content={settings.focusPoint} />
+          <FocusPoint content={settings.textToRead || ""} text={true} />
         </View>
         <View style={{ marginBottom: 20 }}>
           <TextInput
             autoCorrect={false}
             autoFocus={true}
-            onChangeText={text => text && updateSettings({ focusPoint: text })}
-            defaultValue={settings.focusPoint}
-            maxLength={1}
+            onChangeText={text => text && updateSettings({ textToRead: text })}
+            defaultValue={settings.textToRead || ""}
+            multiline={true}
             style={styles.textInput}
           />
-        </View>
-        <Text style={styles.subheader}>Featured</Text>
-        <View style={styles.section}>
-          {featured.map(f => (
-            <TouchableOpacity
-              key={f}
-              style={styles.button}
-              onPress={() => updateSettings({ focusPoint: f })}
-            >
-              <Text style={styles.buttonText}>{f}</Text>
-            </TouchableOpacity>
-          ))}
         </View>
       </ScrollView>
     );
@@ -87,11 +57,13 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   textInput: {
-    width: 200,
-    height: 30,
+    width: 320,
+    height: 300,
     fontSize: 20,
-    textAlign: "center",
-    backgroundColor: "#fff"
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    paddingVertical: 7,
+    paddingHorizontal: 5
   },
   container: {
     flex: 1,

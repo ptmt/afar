@@ -16,11 +16,12 @@ const screenName = navState => {
   return navState ? navState.routes[navState.index].routeName : void 0;
 };
 
-class AfarApp extends React.Component {
-  state: {
-    trainings: Array<TrainingSessionData>,
-    settings: Settings
-  };
+export type MainState = {
+  trainings: Array<TrainingSessionData>,
+  settings: Settings
+};
+
+class AfarApp extends React.Component<{}, MainState> {
   constructor() {
     super();
     this.state = {
@@ -74,6 +75,7 @@ class AfarApp extends React.Component {
             currScreen !== "Training"
           ) {
             Orientation.lockToPortrait();
+            this.updateGlobalState();
           }
         }}
       />

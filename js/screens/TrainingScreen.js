@@ -31,7 +31,19 @@ function formatTime(duration) {
   return `${format(m)}:${format(s)}`;
 }
 
-export default class TrainingScreen extends Component {
+type Props = {
+  screenProps: {
+    settings: {}
+  },
+  navigation: {}
+};
+type State = {
+  distance: number,
+  duration: any,
+  pause: boolean
+};
+
+export default class TrainingScreen extends Component<Props, State> {
   static navigationOptions = {
     header: null
   };
@@ -76,11 +88,6 @@ export default class TrainingScreen extends Component {
       }
     });
   }
-  state: {
-    distance: number,
-    duration: any,
-    pause: boolean
-  };
   interval: any;
   panResponder: any;
   componentDidMount() {
@@ -163,17 +170,22 @@ export default class TrainingScreen extends Component {
         style={[StyleSheet.absoluteFill]}
         {...this.panResponder.panHandlers}
       >
-        <LinearGradient
-          colors={["#FEFFB7", "#FEFFE2"]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={[StyleSheet.absoluteFill, styles.container, borderStyles]}
-        >
+        <View style={[StyleSheet.absoluteFill, styles.container, borderStyles]}>
           <Notification text={this.state.pause ? "Paused" : ""} />
           <View style={styles.points}>
-            <FocusPoint content={settings.focusPoint} />
+            <FocusPoint
+              content={settings.textToRead || settings.focusPoint}
+              text={!!settings.textToRead}
+              pause={this.state.pause}
+              textAlign="right"
+            />
             <View style={{ width: this.state.distance }} />
-            <FocusPoint content={settings.focusPoint} />
+            <FocusPoint
+              content={settings.textToRead || settings.focusPoint}
+              text={!!settings.textToRead}
+              pause={this.state.pause}
+              textAlign="left"
+            />
           </View>
           <Text style={styles.stats}>{formatTime(this.state.duration)}</Text>
           {this.state.pause && (
@@ -195,7 +207,7 @@ export default class TrainingScreen extends Component {
               </TouchableOpacity>
             </View>
           )}
-        </LinearGradient>
+        </View>
       </SafeAreaView>
     );
   }
@@ -207,7 +219,6 @@ const styles = StyleSheet.create({
     // flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor,
     borderWidth: 10
   },
   redBorder: {
@@ -230,13 +241,13 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: "row",
-    paddingLeft: 20,
-    paddingRight: 20,
+    paddingLeft: 25,
+    paddingRight: 25,
     justifyContent: "space-between",
     position: "absolute",
     alignItems: "center",
     // flex: 1,
     width: WIDTH,
-    top: 0
+    top: 10
   }
 });

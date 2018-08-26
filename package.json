@@ -12,6 +12,7 @@
     "d3-shape": "^1.2.0",
     "moment": "^2.22.2",
     "pad-start": "^1.0.2",
+    "polished": "^2.0.2",
     "react": "16.4.1",
     "react-native": "0.56.0",
     "react-native-linear-gradient": "^2.4.1",

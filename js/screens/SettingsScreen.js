@@ -68,6 +68,14 @@ export default class SettingsScreen extends React.Component {
             detail={settings.focusPoint}
             onPress={() => navigate("SetupFocus")}
           />
+
+          <Cell
+            cellStyle="RightDetail"
+            accessory="DisclosureIndicator"
+            title="Text to read"
+            detail={settings.textToRead}
+            onPress={() => navigate("TextToRead")}
+          />
         </Section>
         <Section header=" ">
           <Cell
