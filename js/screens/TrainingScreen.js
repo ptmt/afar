@@ -20,6 +20,7 @@ import moment from "moment";
 import { getAllTimeLog, reportProgress } from "../data/log";
 import Notification from "../components/Notification";
 import FocusPoint from "../components/FocusPoint";
+import startTracking from "../distanceTracking";
 
 const window = Dimensions.get("window");
 const WIDTH = window.width > window.height ? window.width : window.height;
@@ -42,7 +43,8 @@ type Props = {
 type State = {
   distance: number,
   duration: any,
-  pause: boolean
+  pause: boolean,
+  screenToEyes: number
 };
 
 export default class TrainingScreen extends Component<Props, State> {
@@ -57,7 +59,8 @@ export default class TrainingScreen extends Component<Props, State> {
     this.state = {
       distance: 150,
       pause: true,
-      duration: moment.duration(0)
+      duration: moment.duration(0),
+      screenToEyes: 0
     };
     this.moving = false;
     this.panResponder = PanResponder.create({
@@ -91,18 +94,18 @@ export default class TrainingScreen extends Component<Props, State> {
       },
       onPanResponderTerminationRequest: (evt, gestureState) => true,
       onPanResponderRelease: (evt, { dx, dy }) => {
-        if (!this.moving) {
-          this.toggleMoving(dx, dy);
-        } else {
-          this.moving = false;
-        }
+        // if (!this.moving) {
+        //   this.toggleMoving(dx, dy);
+        // } else {
+        //   this.moving = false;
+        // }
       },
       onPanResponderTerminate: (evt, { dx, dy }) => {
-        if (!this.moving) {
-          this.toggleMoving(dx, dy);
-        } else {
-          this.moving = false;
-        }
+        // if (!this.moving) {
+        //   this.toggleMoving(dx, dy);
+        // } else {
+        //   this.moving = false;
+        // }
       },
       onShouldBlockNativeResponder: (evt, gestureState) => {
         return false;
@@ -111,13 +114,18 @@ export default class TrainingScreen extends Component<Props, State> {
   }
   interval: any;
   panResponder: any;
+  faceTrackerListener: any;
   componentDidMount() {
     Orientation.lockToLandscapeLeft();
     AppState.addEventListener("change", this.handleAppStateChange.bind(this));
+    this.faceTrackerListener = startTracking(e =>
+      this.setState({ screenToEyes: Math.round(e.distance) })
+    );
   }
   componentWillUnmount() {
     AppState.removeEventListener("change", this.handleAppStateChange);
     this.handleAppStateChange("inactive");
+    this.faceTrackerListener.remove();
   }
   handleAppStateChange(currentAppState: any) {
     if (currentAppState !== "active") {
@@ -191,7 +199,10 @@ export default class TrainingScreen extends Component<Props, State> {
         style={[StyleSheet.absoluteFill, styles.container, borderStyles]}
         {...this.panResponder.panHandlers}
       >
-        <Notification text={this.state.pause ? "Paused" : ""} />
+        <Notification
+          text={this.state.pause ? "Paused" : ""}
+          screenToEyes={this.state.screenToEyes}
+        />
         <View style={styles.points}>
           <FocusPoint
             content={settings.textToRead || settings.focusPoint}
@@ -235,7 +246,6 @@ export default class TrainingScreen extends Component<Props, State> {
 const backgroundColor = "#FFFDD6";
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 10

@@ -51,7 +51,11 @@ export default class Notification extends React.PureComponent {
       >
         <Text style={styles.h1}>{this.props.text}</Text>
         <Text style={styles.subtitle}>
-          {this.props.text ? "Two-finger tap to continue" : ""}
+          {this.props.text
+            ? `Slowly move your phone away until green border appears (${
+                this.props.screenToEyes
+              })`
+            : ""}
         </Text>
       </Animated.View>
     );
