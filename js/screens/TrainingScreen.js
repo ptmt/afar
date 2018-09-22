@@ -119,7 +119,17 @@ export default class TrainingScreen extends Component<Props, State> {
     Orientation.lockToLandscapeLeft();
     AppState.addEventListener("change", this.handleAppStateChange.bind(this));
     this.faceTrackerListener = startTracking(e =>
-      this.setState({ screenToEyes: Math.round(e.distance) })
+      this.setState({ screenToEyes: Math.round(e.distance) }, () => {
+        if (
+          this.state.pause &&
+          this.state.screenToEyes > 45 &&
+          this.state.screenToEyes < 50
+        ) {
+          this.startMoving();
+        } else if (!this.state.pause) {
+          this.stopMoving();
+        }
+      })
     );
   }
   componentWillUnmount() {
