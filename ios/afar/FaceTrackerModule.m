@@ -14,10 +14,8 @@ NSString* const kDistanceChange = @"onDistanceChange";
 RCT_EXPORT_MODULE();
 
 RCT_EXPORT_METHOD(startTracking) {
-  // Start tracking your face.
   evFaceTracker = [[EVFaceTracker alloc] initWithDelegate:self];
-  // And give us a smooth update 20 times per second.
-  [evFaceTracker fluidUpdateInterval:0.05f withReactionFactor:0.3f];
+  [evFaceTracker fluidUpdateInterval:0.50f withReactionFactor:0.3f];
 }
 
 RCT_EXPORT_METHOD(stopTracking) {
@@ -27,6 +25,7 @@ RCT_EXPORT_METHOD(stopTracking) {
 #pragma mark - <EVFaceTrackerDelegate>
 // This delegate method is called every time the face recognition has detected something (including change)
 - (void)faceIsTracked:(CGRect)faceRect withOffsetWidth:(float)offsetWidth andOffsetHeight:(float)offsetHeight andDistance:(float) distance {
+  NSLog(@"offsetWidth %f offsetHeight %f", offsetWidth, offsetHeight);
   [self sendEventWithName:kDistanceChange body:@{@"distance": @(distance) }];
 }
 
