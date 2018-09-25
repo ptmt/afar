@@ -245,7 +245,7 @@ enum {
             // This is the current recongized distance. See the setDistance method for usages
             distance = (800.0f - (faceRect.size.width + faceRect.size.height)) / 10.0f;
 
-            [self.delegate faceIsTracked:faceRect withOffsetWidth:offsetWidth andOffsetHeight:offsetHeight andDistance: distance];
+//            [self.delegate faceIsTracked:faceRect withOffsetWidth:offsetWidth andOffsetHeight:offsetHeight andDistance: distance];
         });
     }
     

@@ -94,18 +94,18 @@ export default class TrainingScreen extends Component<Props, State> {
       },
       onPanResponderTerminationRequest: (evt, gestureState) => true,
       onPanResponderRelease: (evt, { dx, dy }) => {
-        // if (!this.moving) {
-        //   this.toggleMoving(dx, dy);
-        // } else {
-        //   this.moving = false;
-        // }
+        if (!this.moving) {
+          this.toggleMoving(dx, dy);
+        } else {
+          this.moving = false;
+        }
       },
       onPanResponderTerminate: (evt, { dx, dy }) => {
-        // if (!this.moving) {
-        //   this.toggleMoving(dx, dy);
-        // } else {
-        //   this.moving = false;
-        // }
+        if (!this.moving) {
+          this.toggleMoving(dx, dy);
+        } else {
+          this.moving = false;
+        }
       },
       onShouldBlockNativeResponder: (evt, gestureState) => {
         return false;

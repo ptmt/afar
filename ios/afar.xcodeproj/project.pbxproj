@@ -63,6 +63,7 @@
 		D4EF7E472159641600C124F7 /* libBVLinearGradient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 63AF9C2824164713897C7B7D /* libBVLinearGradient.a */; };
 		D4EF7E492159641600C124F7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		D4EF7E4A2159641600C124F7 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
+		D4EF7E7E215AAD3B00C124F7 /* ARKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4EF7E7D215AAD3B00C124F7 /* ARKit.framework */; };
 		D4F6E522212F4159000A9D39 /* libRCTPushNotification.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D4F6E51F212F4153000A9D39 /* libRCTPushNotification.a */; };
 		D4F6E5E0213319FB000A9D39 /* EVFaceTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F6E5B2213319FA000A9D39 /* EVFaceTracker.m */; };
 		D4F6E5E321331A64000A9D39 /* FaceTrackerModule.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F6E5E221331A64000A9D39 /* FaceTrackerModule.m */; };
@@ -432,6 +433,7 @@
 		CFB00BA8093B4557885E42C6 /* libRNSVG.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNSVG.a; sourceTree = "<group>"; };
 		D4EF7E4F2159641600C124F7 /* afarDev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = afarDev.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4EF7E502159641600C124F7 /* afar copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "afar copy-Info.plist"; path = "/Users/ptmt/Projects/afar/ios/afar copy-Info.plist"; sourceTree = "<absolute>"; };
+		D4EF7E7D215AAD3B00C124F7 /* ARKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ARKit.framework; path = System/Library/Frameworks/ARKit.framework; sourceTree = SDKROOT; };
 		D4F6E519212F4153000A9D39 /* RCTPushNotification.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTPushNotification.xcodeproj; path = "../node_modules/react-native/Libraries/PushNotificationIOS/RCTPushNotification.xcodeproj"; sourceTree = "<group>"; };
 		D4F6E5B2213319FA000A9D39 /* EVFaceTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EVFaceTracker.m; path = afar/EVFaceTracker.m; sourceTree = "<group>"; };
 		D4F6E5DF213319FB000A9D39 /* EVFaceTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EVFaceTracker.h; path = afar/EVFaceTracker.h; sourceTree = "<group>"; };
@@ -454,6 +456,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D4EF7E7E215AAD3B00C124F7 /* ARKit.framework in Frameworks */,
 				D4F6E5E721331C46000A9D39 /* CoreVideo.framework in Frameworks */,
 				D4F6E5E521331C40000A9D39 /* CoreImage.framework in Frameworks */,
 				D4F6E522212F4159000A9D39 /* libRCTPushNotification.a in Frameworks */,
@@ -650,6 +653,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D4EF7E7D215AAD3B00C124F7 /* ARKit.framework */,
 				D4F6E5E621331C46000A9D39 /* CoreVideo.framework */,
 				D4F6E5E421331C40000A9D39 /* CoreImage.framework */,
 				2D16E6891FA4F8E400B85C8A /* libReact.a */,

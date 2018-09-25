@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D4EF7E302159641600C124F7"
-               BuildableName = "afarDev.app"
-               BlueprintName = "afarDev"
-               ReferencedContainer = "container:afar.xcodeproj">
+               BlueprintIdentifier = "83CBBA2D1A601D0E00E9B192"
+               BuildableName = "libReact.a"
+               BlueprintName = "React"
+               ReferencedContainer = "container:../node_modules/react-native/React/React.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -28,10 +28,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "83CBBA2D1A601D0E00E9B192"
-               BuildableName = "libReact.a"
-               BlueprintName = "React"
-               ReferencedContainer = "container:../node_modules/react-native/React/React.xcodeproj">
+               BlueprintIdentifier = "D4EF7E302159641600C124F7"
+               BuildableName = "afarDev.app"
+               BlueprintName = "afarDev"
+               ReferencedContainer = "container:afar.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
