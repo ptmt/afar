@@ -14,8 +14,8 @@ import {
 } from "react-native";
 import Orientation from "react-native-orientation";
 import LinearGradient from "react-native-linear-gradient";
-
 import moment from "moment";
+import { throttle } from "throttle-debounce";
 
 import { getAllTimeLog, reportProgress } from "../data/log";
 import Notification from "../components/Notification";
@@ -55,6 +55,7 @@ export default class TrainingScreen extends Component<Props, State> {
   };
 
   moving: boolean;
+  triggerOnDistanceChangeThrottled: Function;
 
   constructor() {
     super();
@@ -66,6 +67,10 @@ export default class TrainingScreen extends Component<Props, State> {
       screenToEyes: 0
     };
     this.moving = false;
+    this.triggerOnDistanceChangeThrottled = throttle(
+      300,
+      this.triggerOnDistanceChange
+    );
     this.panResponder = PanResponder.create({
       onStartShouldSetPanResponder: (evt, gestureState) =>
         gestureState.numberActiveTouches === 2,
@@ -190,24 +195,27 @@ export default class TrainingScreen extends Component<Props, State> {
     setTimeout(() => goBack(), 100);
   }
   onDistanceChange(e: any) {
-    console.log(e.nativeEvent);
     this.setState(
       { screenToEyes: Math.round(100 * e.nativeEvent.distance) },
       () => {
-        if (
-          this.state.pause &&
-          this.state.screenToEyes > 45 &&
-          this.state.screenToEyes < 50
-        ) {
-          this.startMoving();
-        } else if (
-          (!this.state.pause && this.state.screenToEyes < 45) ||
-          this.state.screenToEyes > 50
-        ) {
-          this.stopMoving();
-        }
+        this.triggerOnDistanceChangeThrottled();
       }
     );
+  }
+  triggerOnDistanceChange() {
+    console.log("throttle");
+    if (
+      this.state.pause &&
+      this.state.screenToEyes > 45 &&
+      this.state.screenToEyes < 50
+    ) {
+      this.startMoving();
+    } else if (
+      (!this.state.pause && this.state.screenToEyes < 45) ||
+      this.state.screenToEyes > 50
+    ) {
+      this.stopMoving();
+    }
   }
   render() {
     const { settings } = this.props.screenProps;
@@ -276,7 +284,7 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: "center",
     alignItems: "center",
-    borderWidth: 10
+    borderWidth: 15
   },
   redBorder: {
     borderColor: "#FFEF79"
@@ -314,6 +322,6 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     backgroundColor: "lightgray",
-    opacity: 0.2
+    opacity: 0
   }
 });

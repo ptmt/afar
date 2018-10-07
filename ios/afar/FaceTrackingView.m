@@ -32,8 +32,7 @@
   // SCNVector3 pos = SCNVector3Make(0, 0, 0);
   SCNVector3 pos1 = faceNode.worldPosition;
   SCNVector3 distance = [faceNode convertPosition:pos1 toNode:[self pointOfView]];
-  //   ARFaceAnchor *face = (ARFaceAnchor*)anchor;
-  
+
   float d = sqrtf(distance.x * distance.x + distance.y * distance.y + distance.z * distance.z);
   NSLog(@"DEBUG: didUpdateNode d %f (%f %f %f)", round(d*100), faceNode.worldPosition.x, faceNode.worldPosition.y, faceNode.worldPosition.z);
   
