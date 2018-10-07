@@ -40,6 +40,8 @@
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
 		D317F0A24B4241189EF6F522 /* libRNSVG-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 13AB1564A41F4B66A32FF21C /* libRNSVG-tvOS.a */; };
+		D4013764216A47EB0080F27B /* FaceTrackingView.m in Sources */ = {isa = PBXBuildFile; fileRef = D4013763216A47EB0080F27B /* FaceTrackingView.m */; };
+		D4013765216A49A60080F27B /* FaceTrackingView.m in Sources */ = {isa = PBXBuildFile; fileRef = D4013763216A47EB0080F27B /* FaceTrackingView.m */; };
 		D4EF7E322159641600C124F7 /* EVFaceTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F6E5B2213319FA000A9D39 /* EVFaceTracker.m */; };
 		D4EF7E332159641600C124F7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		D4EF7E342159641600C124F7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
@@ -431,6 +433,8 @@
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
 		CFB00BA8093B4557885E42C6 /* libRNSVG.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNSVG.a; sourceTree = "<group>"; };
+		D4013736216A47EB0080F27B /* FaceTrackingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FaceTrackingView.h; path = afar/FaceTrackingView.h; sourceTree = "<group>"; };
+		D4013763216A47EB0080F27B /* FaceTrackingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FaceTrackingView.m; path = afar/FaceTrackingView.m; sourceTree = "<group>"; };
 		D4EF7E4F2159641600C124F7 /* afarDev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = afarDev.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4EF7E502159641600C124F7 /* afar copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "afar copy-Info.plist"; path = "/Users/ptmt/Projects/afar/ios/afar copy-Info.plist"; sourceTree = "<absolute>"; };
 		D4EF7E7D215AAD3B00C124F7 /* ARKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ARKit.framework; path = System/Library/Frameworks/ARKit.framework; sourceTree = SDKROOT; };
@@ -612,6 +616,8 @@
 		13B07FAE1A68108700A75B9A /* afar */ = {
 			isa = PBXGroup;
 			children = (
+				D4013736216A47EB0080F27B /* FaceTrackingView.h */,
+				D4013763216A47EB0080F27B /* FaceTrackingView.m */,
 				D4F6E5E121331A64000A9D39 /* FaceTrackerModule.h */,
 				D4F6E5E221331A64000A9D39 /* FaceTrackerModule.m */,
 				D4F6E5DF213319FB000A9D39 /* EVFaceTracker.h */,
@@ -1419,6 +1425,7 @@
 			files = (
 				D4F6E5E0213319FB000A9D39 /* EVFaceTracker.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				D4013764216A47EB0080F27B /* FaceTrackingView.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				D4F6E5E321331A64000A9D39 /* FaceTrackerModule.m in Sources */,
 			);
@@ -1447,6 +1454,7 @@
 			files = (
 				D4EF7E322159641600C124F7 /* EVFaceTracker.m in Sources */,
 				D4EF7E332159641600C124F7 /* AppDelegate.m in Sources */,
+				D4013765216A49A60080F27B /* FaceTrackingView.m in Sources */,
 				D4EF7E342159641600C124F7 /* main.m in Sources */,
 				D4EF7E352159641600C124F7 /* FaceTrackerModule.m in Sources */,
 			);

@@ -21,6 +21,7 @@ import { getAllTimeLog, reportProgress } from "../data/log";
 import Notification from "../components/Notification";
 import FocusPoint from "../components/FocusPoint";
 import startTracking from "../distanceTracking";
+import FaceTrackingView from "../components/FaceTrackingView";
 
 const window = Dimensions.get("window");
 const WIDTH = window.width > window.height ? window.width : window.height;
@@ -44,7 +45,8 @@ type State = {
   distance: number,
   duration: any,
   pause: boolean,
-  screenToEyes: number
+  screenToEyes: number,
+  initialized: boolean
 };
 
 export default class TrainingScreen extends Component<Props, State> {
@@ -59,6 +61,7 @@ export default class TrainingScreen extends Component<Props, State> {
     this.state = {
       distance: 150,
       pause: true,
+      initialized: false,
       duration: moment.duration(0),
       screenToEyes: 0
     };
@@ -116,26 +119,15 @@ export default class TrainingScreen extends Component<Props, State> {
   panResponder: any;
   faceTrackerListener: any;
   componentDidMount() {
-    Orientation.lockToLandscapeLeft();
+    this.setState({ initialized: true });
     AppState.addEventListener("change", this.handleAppStateChange.bind(this));
-    this.faceTrackerListener = startTracking(e =>
-      this.setState({ screenToEyes: Math.round(e.distance) }, () => {
-        if (
-          this.state.pause &&
-          this.state.screenToEyes > 45 &&
-          this.state.screenToEyes < 50
-        ) {
-          this.startMoving();
-        } else if (!this.state.pause) {
-          this.stopMoving();
-        }
-      })
-    );
+    // this.faceTrackerListener = startTracking(e =>
+
+    // );
   }
   componentWillUnmount() {
     AppState.removeEventListener("change", this.handleAppStateChange);
     this.handleAppStateChange("inactive");
-    this.faceTrackerListener.remove();
   }
   handleAppStateChange(currentAppState: any) {
     if (currentAppState !== "active") {
@@ -197,6 +189,26 @@ export default class TrainingScreen extends Component<Props, State> {
     this.stopMoving();
     setTimeout(() => goBack(), 100);
   }
+  onDistanceChange(e: any) {
+    console.log(e.nativeEvent);
+    this.setState(
+      { screenToEyes: Math.round(100 * e.nativeEvent.distance) },
+      () => {
+        if (
+          this.state.pause &&
+          this.state.screenToEyes > 45 &&
+          this.state.screenToEyes < 50
+        ) {
+          this.startMoving();
+        } else if (
+          (!this.state.pause && this.state.screenToEyes < 45) ||
+          this.state.screenToEyes > 50
+        ) {
+          this.stopMoving();
+        }
+      }
+    );
+  }
   render() {
     const { settings } = this.props.screenProps;
 
@@ -248,6 +260,12 @@ export default class TrainingScreen extends Component<Props, State> {
             </TouchableOpacity>
           </View>
         )}
+        {this.state.initialized && (
+          <FaceTrackingView
+            style={styles.faceArea}
+            onDistanceChange={e => this.onDistanceChange(e)}
+          />
+        )}
       </SafeAreaView>
     );
   }
@@ -288,5 +306,14 @@ const styles = StyleSheet.create({
     // flex: 1,
     width: WIDTH,
     top: 10
+  },
+  faceArea: {
+    position: "absolute",
+    right: 40,
+    top: 50,
+    width: 100,
+    height: 100,
+    backgroundColor: "lightgray",
+    opacity: 0.2
   }
 });
