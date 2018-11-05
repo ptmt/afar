@@ -122,13 +122,9 @@ export default class TrainingScreen extends Component<Props, State> {
   }
   interval: any;
   panResponder: any;
-  faceTrackerListener: any;
   componentDidMount() {
     this.setState({ initialized: true });
     AppState.addEventListener("change", this.handleAppStateChange.bind(this));
-    // this.faceTrackerListener = startTracking(e =>
-
-    // );
   }
   componentWillUnmount() {
     AppState.removeEventListener("change", this.handleAppStateChange);
@@ -268,12 +264,13 @@ export default class TrainingScreen extends Component<Props, State> {
             </TouchableOpacity>
           </View>
         )}
-        {this.state.initialized && (
-          <FaceTrackingView
-            style={styles.faceArea}
-            onDistanceChange={e => this.onDistanceChange(e)}
-          />
-        )}
+        {this.state.initialized &&
+          settings.faceTracker && (
+            <FaceTrackingView
+              style={styles.faceArea}
+              onDistanceChange={e => this.onDistanceChange(e)}
+            />
+          )}
       </SafeAreaView>
     );
   }

@@ -3,13 +3,15 @@ import { AsyncStorage } from "react-native";
 
 const SETTINGS_KEY = "settings";
 export const DEFAULT_SETTINGS = {
-  focusPoint: "▣"
+  focusPoint: "🔘"
 };
 export type Settings = {
   dayGoalInMinutes?: number,
   reminder?: Boolean,
   focusPoint: string,
-  textToRead?: string
+  textToRead?: string,
+  texts: Array<string>,
+  faceTracker?: Boolean
 };
 
 export async function loadSettings() {

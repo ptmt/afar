@@ -36,69 +36,89 @@ export default class SettingsScreen extends React.Component {
       }
     }
   }
+  toggleFaceDistance() {
+    const { faceTracker } = this.props.screenProps.settings;
+    this.props.screenProps.updateSettings({ faceTracker: !faceTracker });
+  }
   render() {
     const { navigate, state } = this.props.navigation;
     const { settings } = this.props.screenProps;
 
     return (
-      <TableView style={{ flex: 1 }}>
-        <Section header=" ">
-          <Cell
-            cellStyle="RightDetail"
-            accessory="DisclosureIndicator"
-            detail="15 minutes"
-            title="Daily goal"
-            onPress={() => navigate("Settings", {})}
-          />
-          <Cell
-            title="Enable reminders"
-            cellAccessoryView={
-              <Switch
-                onChange={() => this.setupNotifications()}
-                value={settings.reminder}
-              />
-            }
-            contentContainerStyle={{ paddingVertical: 4 }} // Adjust height
-          />
+      <View
+        style={[
+          StyleSheet.absoluteFill,
+          { backgroundColor: "rgb(239, 239, 244)" }
+        ]}
+      >
+        <TableView style={{ flex: 1 }}>
+          <Section header=" ">
+            <Cell
+              cellStyle="RightDetail"
+              accessory="DisclosureIndicator"
+              detail="15 minutes"
+              title="Daily goal"
+              onPress={() => navigate("Settings", {})}
+            />
+            <Cell
+              title="Reminder"
+              cellAccessoryView={
+                <Switch
+                  onChange={() => this.setupNotifications()}
+                  value={settings.reminder}
+                />
+              }
+              contentContainerStyle={{ paddingVertical: 4 }} // Adjust height
+            />
+            <Cell
+              title="Face-distance activation (experimental)"
+              cellAccessoryView={
+                <Switch
+                  onChange={() => this.toggleFaceDistance()}
+                  value={settings.faceTracker}
+                />
+              }
+              contentContainerStyle={{ paddingVertical: 4 }} // Adjust height
+            />
 
-          <Cell
-            cellStyle="RightDetail"
-            accessory="DisclosureIndicator"
-            title="Focus Point"
-            detail={settings.focusPoint}
-            onPress={() => navigate("SetupFocus")}
-          />
+            <Cell
+              cellStyle="RightDetail"
+              accessory="DisclosureIndicator"
+              title="Focus Point"
+              detail={settings.focusPoint}
+              onPress={() => navigate("SetupFocus")}
+            />
 
-          <Cell
-            cellStyle="RightDetail"
-            accessory="DisclosureIndicator"
-            title="Text to read"
-            detail={settings.textToRead}
-            onPress={() => navigate("TextToRead")}
-          />
-        </Section>
-        <Section header=" ">
-          <Cell
-            cellStyle="RightDetail"
-            accessory="DisclosureIndicator"
-            title="Help"
-            onPress={() => navigate("Settings", {})}
-          />
-          <Cell
-            cellStyle="RightDetail"
-            accessory="DisclosureIndicator"
-            title="About"
-            onPress={() => navigate("Settings", {})}
-          />
-        </Section>
-      </TableView>
+            <Cell
+              cellStyle="RightDetail"
+              accessory="DisclosureIndicator"
+              title="Text to read"
+              detail={settings.textToRead}
+              onPress={() => navigate("TextToRead")}
+            />
+          </Section>
+          <Section header=" ">
+            <Cell
+              cellStyle="RightDetail"
+              accessory="DisclosureIndicator"
+              title="Help"
+              onPress={() => navigate("Settings", {})}
+            />
+            <Cell
+              cellStyle="RightDetail"
+              accessory="DisclosureIndicator"
+              title="About"
+              onPress={() => navigate("Settings", {})}
+            />
+          </Section>
+        </TableView>
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
   stage: {
-    // backgroundColor: "#ddd",
     flex: 1,
     paddingTop: 1
     // paddingBottom: 20
