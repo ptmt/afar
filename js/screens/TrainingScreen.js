@@ -17,6 +17,7 @@ import LinearGradient from "react-native-linear-gradient";
 import moment from "moment";
 import { throttle } from "throttle-debounce";
 
+import { type Settings } from "../data/settings";
 import { getAllTimeLog, reportProgress } from "../data/log";
 import Notification from "../components/Notification";
 import FocusPoint from "../components/FocusPoint";
@@ -35,7 +36,7 @@ function formatTime(duration) {
 
 type Props = {
   screenProps: {
-    settings: {}
+    settings: Settings
   },
   navigation: {
     goBack: Function
@@ -213,12 +214,18 @@ export default class TrainingScreen extends Component<Props, State> {
       this.stopMoving();
     }
   }
+
   render() {
     const { settings } = this.props.screenProps;
 
     const borderStyles = this.state.pause
       ? styles.redBorder
       : styles.greenBorder;
+
+    const content =
+      settings.textToRead != null
+        ? settings.texts[settings.textToRead]
+        : settings.focusPoint;
 
     return (
       <SafeAreaView
@@ -231,14 +238,14 @@ export default class TrainingScreen extends Component<Props, State> {
         />
         <View style={styles.points}>
           <FocusPoint
-            content={settings.textToRead || settings.focusPoint}
+            content={content}
             text={!!settings.textToRead}
             pause={this.state.pause}
             width={this.state.distance / 2}
           />
           <View style={{ width: this.state.distance / 2 }} />
           <FocusPoint
-            content={settings.textToRead || settings.focusPoint}
+            content={content}
             text={!!settings.textToRead}
             pause={this.state.pause}
             width={this.state.distance / 2}

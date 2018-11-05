@@ -92,8 +92,12 @@ export default class SettingsScreen extends React.Component {
             <Cell
               cellStyle="RightDetail"
               accessory="DisclosureIndicator"
-              title="Text to read"
-              detail={settings.textToRead}
+              title="Texts"
+              detail={
+                settings.textToRead
+                  ? settings.texts[settings.textToRead]
+                  : "Not set"
+              }
               onPress={() => navigate("TextToRead")}
             />
           </Section>
