@@ -11,7 +11,8 @@ import {
   TextInput,
   KeyboardAvodingView,
   FlatList,
-  Modal
+  Modal,
+  SafeAreaView
 } from "react-native";
 
 import {
@@ -163,7 +164,7 @@ function Item({ text, selected, select }) {
   return (
     <TouchableOpacity
       style={{
-        height: 40,
+        height: 50,
         flex: 1,
         backgroundColor: "white",
         justifyContent: "space-between",

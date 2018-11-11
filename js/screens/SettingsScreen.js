@@ -84,7 +84,7 @@ export default class SettingsScreen extends React.Component {
             <Cell
               cellStyle="RightDetail"
               accessory="DisclosureIndicator"
-              title="Focus Point"
+              title="Static Focus Point"
               detail={settings.focusPoint}
               onPress={() => navigate("SetupFocus")}
             />
