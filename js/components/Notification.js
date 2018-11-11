@@ -51,13 +51,15 @@ export default class Notification extends React.PureComponent {
       >
         <Text style={styles.h1}>{this.props.text}</Text>
         <Text style={styles.subtitle}>
-          {this.props.text
-            ? `Dobule tap to continue or move your phone ${
-                this.props.screenToEyes > 50
-                  ? "closer to your eyes"
-                  : "away from your eyes"
-              }`
-            : ""}
+          {this.props.faceTrackerEnabled
+            ? this.props.text
+              ? `Dobule tap to continue or move your phone ${
+                  this.props.screenToEyes > 50
+                    ? "closer to your eyes"
+                    : "away from your eyes"
+                }`
+              : ""
+            : "Double tap to continue"}
         </Text>
       </Animated.View>
     );

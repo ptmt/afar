@@ -235,6 +235,7 @@ export default class TrainingScreen extends Component<Props, State> {
         <Notification
           text={this.state.pause ? "Paused" : ""}
           screenToEyes={this.state.screenToEyes}
+          faceTrackerEnabled={settings.faceTracker}
         />
         <View style={styles.points}>
           <FocusPoint
@@ -258,26 +259,25 @@ export default class TrainingScreen extends Component<Props, State> {
               onPress={() => this.goBack()}
               hitSlop={{ top: 10, bottom: 40, left: 10, right: 40 }}
             >
-              <Text style={styles.stats}>Back</Text>
+              <Text style={styles.button}>Back</Text>
             </TouchableOpacity>
             {/* <Text style={styles.stats}>
                 Distance: {Math.round(this.state.distance)}
               </Text> */}
             <TouchableOpacity
               onPress={() => this.goBack()}
-              hitSlop={{ top: 10, bottom: 10, left: 10, right: 20 }}
+              hitSlop={{ top: 10, bottom: 40, left: 40, right: 20 }}
             >
-              <Text style={styles.stats}>Instructions</Text>
+              <Text style={styles.button}>Instructions</Text>
             </TouchableOpacity>
           </View>
         )}
-        {this.state.initialized &&
-          settings.faceTracker && (
-            <FaceTrackingView
-              style={styles.faceArea}
-              onDistanceChange={e => this.onDistanceChange(e)}
-            />
-          )}
+        {this.state.initialized && settings.faceTracker && (
+          <FaceTrackingView
+            style={styles.faceArea}
+            onDistanceChange={e => this.onDistanceChange(e)}
+          />
+        )}
       </SafeAreaView>
     );
   }
@@ -306,6 +306,11 @@ const styles = StyleSheet.create({
     // fontWeight: "300",
     fontSize: 18,
     color: "#777",
+    marginBottom: 5
+  },
+  button: {
+    fontSize: 18,
+    color: "rgb(32, 139, 255)",
     marginBottom: 5
   },
   header: {

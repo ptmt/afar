@@ -42,7 +42,7 @@ export default class MainScreen extends React.Component {
 
     return secondsAll > 0
       ? moment.duration(secondsAll, "seconds").humanize()
-      : "None";
+      : "00:00";
   }
   spentToday() {
     const spentToday = this.props.screenProps.trainings
@@ -75,16 +75,13 @@ export default class MainScreen extends React.Component {
             <ProgressChart data={this.props.screenProps.trainings} />
           </View>
           <View style={styles.stats}>
-            <Stat label="Trained today">{this.spendTodayFormatted()}</Stat>
             <Stat label="Daily goal">15 minutes</Stat>
-            <Stat label="Total">{this.allTimeSpent()}</Stat>
+            <Stat label="Trained today">{this.spendTodayFormatted()}</Stat>
+            <Stat label="Total time">{this.allTimeSpent()}</Stat>
           </View>
         </ScrollView>
         <SafeAreaView>
-          <StartButton
-            title="Start"
-            onPress={() => navigate("Training", { name: "Jane" })}
-          />
+          <StartButton title="Start" onPress={() => navigate("Training")} />
         </SafeAreaView>
       </View>
     );

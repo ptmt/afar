@@ -66,9 +66,10 @@ export default class TextToRead extends React.Component {
     } else {
       updateSettings({
         texts: texts.concat([this.state.draft]),
-        textToRead: texts.size
+        textToRead: texts.length
       });
     }
+    this.setState({ draft: "", draftId: null });
   }
   edit(index, text) {
     this.setState({
@@ -120,40 +121,45 @@ export default class TextToRead extends React.Component {
           transparent={false}
           visible={this.state.modalVisible}
         >
-          <View style={styles.container}>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                paddingVertical: 20,
-                paddingHorizontal: 10,
-                width: "100%"
-              }}
-            >
-              <Button title="Cancel" onPress={() => this.cancel()} />
+          <SafeAreaView style={{ flex: 1 }}>
+            <View style={styles.container}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  paddingVertical: 20,
+                  paddingHorizontal: 10,
+                  width: "100%"
+                }}
+              >
+                <Button title="Cancel" onPress={() => this.cancel()} />
 
-              <Button title="Save & Make active" onPress={() => this.save()} />
-            </View>
+                <Button
+                  title="Save & Make active"
+                  onPress={() => this.save()}
+                />
+              </View>
 
-            <View style={styles.preview}>
-              <FocusPoint content={this.state.draft} text={true} />
-            </View>
-            <View style={{ marginBottom: 20 }}>
-              <TextInput
-                autoCorrect={false}
-                autoFocus={true}
-                onChangeText={draft => draft && this.setState({ draft })}
-                defaultValue={this.state.draft || ""}
-                multiline={true}
-                style={styles.textInput}
-                placeholder="Start typing text here"
-              />
-            </View>
-            {/* <Button
+              <View style={styles.preview}>
+                <FocusPoint content={this.state.draft} text={true} />
+              </View>
+              <View style={{ marginBottom: 20 }}>
+                <TextInput
+                  autoCorrect={false}
+                  autoFocus={true}
+                  onChangeText={draft => draft && this.setState({ draft })}
+                  defaultValue={this.state.draft || ""}
+                  multiline={true}
+                  style={styles.textInput}
+                  placeholder="Start typing text here"
+                />
+              </View>
+              {/* <Button
               title="Clear"
               onPress={() => updateSettings({ textToRead: "" })}
             /> */}
-          </View>
+            </View>
+          </SafeAreaView>
         </Modal>
       </ScrollView>
     );

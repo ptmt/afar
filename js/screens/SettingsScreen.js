@@ -45,14 +45,14 @@ export default class SettingsScreen extends React.Component {
     const { settings } = this.props.screenProps;
 
     return (
-      <View
-        style={[
+      <ScrollView
+        contentContainerStyle={[
           StyleSheet.absoluteFill,
           { backgroundColor: "rgb(239, 239, 244)" }
         ]}
       >
         <TableView style={{ flex: 1 }}>
-          <Section header=" ">
+          <Section header="Notifications">
             <Cell
               cellStyle="RightDetail"
               accessory="DisclosureIndicator"
@@ -70,6 +70,8 @@ export default class SettingsScreen extends React.Component {
               }
               contentContainerStyle={{ paddingVertical: 4 }} // Adjust height
             />
+          </Section>
+          <Section header="Experimental">
             <Cell
               title="Face-distance activation (experimental)"
               cellAccessoryView={
@@ -80,7 +82,8 @@ export default class SettingsScreen extends React.Component {
               }
               contentContainerStyle={{ paddingVertical: 4 }} // Adjust height
             />
-
+          </Section>
+          <Section header="Focus">
             <Cell
               cellStyle="RightDetail"
               accessory="DisclosureIndicator"
@@ -106,17 +109,17 @@ export default class SettingsScreen extends React.Component {
               cellStyle="RightDetail"
               accessory="DisclosureIndicator"
               title="Help"
-              onPress={() => navigate("Settings", {})}
+              onPress={() => navigate("Intro", {})}
             />
-            <Cell
+            {/* <Cell
               cellStyle="RightDetail"
               accessory="DisclosureIndicator"
               title="About"
               onPress={() => navigate("Settings", {})}
-            />
+            /> */}
           </Section>
         </TableView>
-      </View>
+      </ScrollView>
     );
   }
 }
