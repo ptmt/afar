@@ -9,6 +9,7 @@ import type { TrainingSessionData } from "./data/log";
 import { loadSettings, saveSettings, DEFAULT_SETTINGS } from "./data/settings";
 import type { Settings } from "./data/settings";
 import AppNavigator from "./Navigator";
+import moment from "moment";
 
 Orientation.lockToPortrait();
 
@@ -56,7 +57,7 @@ class AfarApp extends React.Component<{}, MainState> {
     }
   }
 
-  render() {
+  render = () => {
     const screenProps = {
       ...this.state,
       updateSettings: s => this.updateSettings(s),
@@ -87,7 +88,9 @@ class AfarApp extends React.Component<{}, MainState> {
         }}
       />
     );
-  }
+  };
 }
 
-export default () => AppRegistry.registerComponent("afar", () => AfarApp);
+AppRegistry.registerComponent("afar", () => AfarApp);
+
+export default () => AfarApp;
